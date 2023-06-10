@@ -16,26 +16,26 @@ end
 
 function NamePlatesComplete_AuraSortDriverMixin:OnEvent(event, ...)
     if event == "NAME_PLATE_UNIT_ADDED" then
-        local unit = ...
-        local namePlate = C_NamePlate.GetNamePlateForUnit(unit)
-        if namePlate then
-            self:SetupHooks(namePlate)
-        end
+        self:OnNamePlateUnitAdded(...)
     end
 end
 
-function NamePlatesComplete_AuraSortDriverMixin:Refresh()
-    self.spellOrder = {}
-    for i, spellID in ipairs(self.spells) do
-        self.spellOrder[spellID] = i - #self.spells
+function NamePlatesComplete_AuraSortDriverMixin:OnNamePlateUnitAdded(unit)
+    local namePlate = C_NamePlate.GetNamePlateForUnit(unit)
+    if namePlate then
+        self:SetupHook(namePlate)
     end
 end
 
-function NamePlatesComplete_AuraSortDriverMixin:SetupHooks(namePlate)
+function NamePlatesComplete_AuraSortDriverMixin:SetupHook(namePlate)
     local buffFrame = namePlate.UnitFrame.BuffFrame
-    if buffFrame.auras == nil or buffFrame.__np_complete_auras == nil then
+    if not buffFrame then
+        return
+    end
+
+    if buffFrame and buffFrame.auras == nil or buffFrame.__np_complete_auras == nil then
         if buffFrame.__np_complete_auras and buffFrame.__np_complete_auras ~= buffFrame.auras then
-            print(addonName .. ": Another addon has modified how auras or sorted. Please disable other nameplate addons.")
+            print(addonName .. ": An unknown addon modified aura sorting. Please disable other nameplate addons.")
         end
 
         local ordered = TableUtil.CreatePriorityTable(
@@ -47,7 +47,14 @@ function NamePlatesComplete_AuraSortDriverMixin:SetupHooks(namePlate)
         buffFrame.__np_complete_auras = ordered
         buffFrame.auras = ordered
 
-        NamePlateDriverFrame:OnUnitAuraUpdate(namePlate.namePlateUnitToken, {isFullUpdate = true})
+        NamePlateDriverFrame:OnUnitAuraUpdate(namePlate.namePlateUnitToken, { isFullUpdate = true })
+    end
+end
+
+function NamePlatesComplete_AuraSortDriverMixin:Refresh()
+    self.spellOrder = {}
+    for i, spellID in ipairs(self.spells) do
+        self.spellOrder[spellID] = i - #self.spells
     end
 end
 
