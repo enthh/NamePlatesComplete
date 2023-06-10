@@ -5,14 +5,7 @@
 	<Frame name="NamePlatesComplete_AuraTooltipDriverFrame" toplevel="true" mixin="NamePlatesComplete_AuraTooltipDriverMixin">
 		<Scripts>
 			<OnLoad method="OnLoad" />
-		</Scripts>
-	</Frame>
-
-	<Frame name="NamePlatesComplete_AuraTooltipBuffTemplate" virtual="true">
-		<Scripts>
-			<OnLoad inherit="append">
-				self:EnableMouse(false)
-			</OnLoad>
+			<OnEvent method="OnEvent" />
 		</Scripts>
 	</Frame>
 </Ui>
