@@ -1,0 +1,74 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.blizzard.com/wow/ui/ ..\..\FrameXML\UI.xsd">
+	<Script file="NamePlatesComplete_AuraGlow.lua" />
+
+	<Frame name="NamePlatesComplete_AuraGlowDriverFrame" toplevel="true"
+		mixin="NamePlatesComplete_AuraGlowDriverMixin">
+		<Scripts>
+			<OnLoad method="OnLoad" />
+		</Scripts>
+	</Frame>
+
+
+	<Frame name="NamePlatesComplete_AuraGlowTemplate" virtual="true"
+		mixin="NamePlatesComplete_AuraGlowMixin">
+		<Animations>
+			<AnimationGroup parentKey="Flash" setToFinalAlpha="true">
+				<Alpha parentKey="Delay" childKey="ProcFlashFlipBook" duration="0.002" order="0"
+					fromAlpha="1" toAlpha="1" />
+				<FlipBook parentKey="Flip"
+					childKey="ProcFlashFlipBook"
+					order="1"
+					duration="0.8"
+					flipBookColumns="5"
+					flipBookRows="5"
+					flipBookFrames="20"
+					flipBookFrameWidth="0"
+					flipBookFrameHeight="0"
+				>
+				</FlipBook>
+			</AnimationGroup>
+			<AnimationGroup parentKey="Glow" looping="REPEAT" setToFinalAlpha="true">
+				<Alpha parentKey="Delay" childKey="ProcLoopFlipBook" duration="0.002" order="0"
+					fromAlpha="1" toAlpha="1" />
+				<FlipBook parentKey="Flip"
+					childKey="ProcLoopFlipBook"
+					order="1"
+					duration="1"
+					flipBookColumns="5"
+					flipBookRows="5"
+					flipBookFrames="25"
+					flipBookFrameWidth="0"
+					flipBookFrameHeight="0"
+				>
+				</FlipBook>
+			</AnimationGroup>
+		</Animations>
+		<Layers>
+			<Layer level="ARTWORK">
+				<Texture parentKey="ProcFlashFlipBook"
+					file="Interface\AddOns\NamePlatesComplete_AuraGlow\flash1024.PNG"
+					alpha="0"
+					setAllPoints="true">
+					<Anchors>
+						<Anchor point="CENTER" />
+					</Anchors>
+				</Texture>
+			</Layer>
+			<Layer level="OVERLAY">
+				<Texture parentKey="ProcLoopFlipBook"
+					file="Interface\AddOns\NamePlatesComplete_AuraGlow\glow512.PNG"
+					alpha="0"
+					alphaMode="ADD"
+					setAllPoints="true">
+					<Anchors>
+						<Anchor point="CENTER" />
+					</Anchors>
+				</Texture>
+			</Layer>
+		</Layers>
+		<Scripts>
+			<OnShow method="OnShow" />
+		</Scripts>
+	</Frame>
+</Ui>

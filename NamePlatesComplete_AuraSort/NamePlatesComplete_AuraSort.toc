@@ -1,0 +1,9 @@
+## Interface: 100100
+## Title: NamePlates - Aura Sort
+## Notes: Blizzard nameplate aura sorting
+## Author: Enth-Emerald Dream
+## Version: @project-version@
+## X-Website: https://www.curseforge.com/wow/addons/nameplates_complete
+## Dependencies: NamePlatesComplete
+
+NamePlatesComplete_AuraSort.xml
