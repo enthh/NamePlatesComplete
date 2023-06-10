@@ -1,38 +1,53 @@
-local spells = {
-    155722, -- rake = 155722,
-    1079,   -- rip = 1079,
-    405233, -- thrash = 405233,
-    155625, -- moonfire = 155625,
-}
+local addonName, _ = ...
 
 NamePlatesComplete_AuraSortDriverMixin = {}
 
 function NamePlatesComplete_AuraSortDriverMixin:OnLoad()
-    self:SetSpells(spells)
+    self.spells = {
+        155722, -- rake = 155722,
+        1079,   -- rip = 1079,
+        405233, -- thrash = 405233,
+        155625, -- moonfire = 155625,
+    }
+    self:Refresh()
 
-    hooksecurefunc(NamePlateDriverFrame, "OnNamePlateCreated", function(_, nameplateBase)
-        hooksecurefunc(nameplateBase, "OnOptionsUpdated", function(namePlate)
-            self:OnNamePlateOptionsUpdated(namePlate)
-        end)
-    end)
+    self:RegisterEvent("NAME_PLATE_UNIT_ADDED")
 end
 
-function NamePlatesComplete_AuraSortDriverMixin:SetSpells(spells)
-    self.spellOrder = {}
-    for i, spellID in ipairs(spells) do
-        self.spellOrder[spellID] = i - #spells
+function NamePlatesComplete_AuraSortDriverMixin:OnEvent(event, ...)
+    if event == "NAME_PLATE_UNIT_ADDED" then
+        local unit = ...
+        local namePlate = C_NamePlate.GetNamePlateForUnit(unit)
+        if namePlate then
+            self:SetupHooks(namePlate)
+        end
     end
 end
 
-function NamePlatesComplete_AuraSortDriverMixin:OnNamePlateOptionsUpdated(namePlate)
-    local unitFrame = namePlate.UnitFrame
-    if unitFrame then
-        local buffFrame = unitFrame.BuffFrame
-        if buffFrame then
-            buffFrame.auras = TableUtil.CreatePriorityTable(function(a, b)
-                return self:Compare(a, b)
-            end, TableUtil.Constants.AssociativePriorityTable)
+function NamePlatesComplete_AuraSortDriverMixin:Refresh()
+    self.spellOrder = {}
+    for i, spellID in ipairs(self.spells) do
+        self.spellOrder[spellID] = i - #self.spells
+    end
+end
+
+function NamePlatesComplete_AuraSortDriverMixin:SetupHooks(namePlate)
+    local buffFrame = namePlate.UnitFrame.BuffFrame
+    if buffFrame.auras == nil or buffFrame.__np_complete_auras == nil then
+        if buffFrame.__np_complete_auras and buffFrame.__np_complete_auras ~= buffFrame.auras then
+            print(addonName .. ": Another addon has modified how auras or sorted. Please disable other nameplate addons.")
         end
+
+        local ordered = TableUtil.CreatePriorityTable(
+            function(a, b)
+                return self:Compare(a, b)
+            end,
+            TableUtil.Constants.AssociativePriorityTable)
+
+        buffFrame.__np_complete_auras = ordered
+        buffFrame.auras = ordered
+
+        NamePlateDriverFrame:OnUnitAuraUpdate(namePlate.namePlateUnitToken, {isFullUpdate = true})
     end
 end
 
@@ -43,5 +58,5 @@ function NamePlatesComplete_AuraSortDriverMixin:Compare(a, b)
         return (aOrder or a.auraInstanceID) < (bOrder or b.auraInstanceID)
     end
 
-    return AuraUtil.DefaultAuraCompare(a,b)
+    return AuraUtil.DefaultAuraCompare(a, b)
 end
