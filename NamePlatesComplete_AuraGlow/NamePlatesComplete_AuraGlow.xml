@@ -6,6 +6,7 @@
 		mixin="NamePlatesComplete_AuraGlowDriverMixin">
 		<Scripts>
 			<OnLoad method="OnLoad" />
+			<OnEvent method="OnEvent" />
 		</Scripts>
 	</Frame>
 
@@ -19,7 +20,7 @@
 				<FlipBook parentKey="Flip"
 					childKey="ProcFlashFlipBook"
 					order="1"
-					duration="0.8"
+					duration="0.5"
 					flipBookColumns="5"
 					flipBookRows="5"
 					flipBookFrames="20"
