@@ -23,10 +23,17 @@ Buff to Glow lifecycle matches spell details of the buff:
     Missing Buff  - Release Glow
 
 ]]
+
+
 NamePlatesComplete_AuraGlowDriverMixin = {}
 
 function NamePlatesComplete_AuraGlowDriverMixin:OnLoad()
-    self.glowPools = CreateFramePoolCollection()
+    self.pool = CreateFramePool("Frame", self, "NamePlatesComplete_AuraGlowTemplate", function(pool, frame)
+        frame:Hide()
+        frame:ClearAllPoints()
+        frame:Reset()
+    end)
+
     self.spellIDs = {
         [155722] = true, -- rake
         [1079] = true,   -- rip
@@ -40,63 +47,53 @@ function NamePlatesComplete_AuraGlowDriverMixin:OnLoad()
 end
 
 function NamePlatesComplete_AuraGlowDriverMixin:OnEvent(event, ...)
-    if event == "UNIT_AURA" then
-        local unit, unitAuraUpdateInfo = ...
-        local namePlate = C_NamePlate.GetNamePlateForUnit(unit)
-        if namePlate then
-            -- TODO optimizaiton - could be duplicate for nameplate# / target / player
-            self:UpdateBuffs(namePlate.UnitFrame.BuffFrame, namePlate.namePlateUnitToken, unitAuraUpdateInfo)
-        end
-    elseif event == "NAME_PLATE_UNIT_ADDED" then
-        local unit = ...
-        local namePlate = C_NamePlate.GetNamePlateForUnit(unit)
-        if namePlate then
-            self:UpdateBuffs(namePlate.UnitFrame.BuffFrame, namePlate.namePlateUnitToken)
-        end
+    local unit = ...
+    local namePlate = C_NamePlate.GetNamePlateForUnit(unit)
+    if not namePlate then
+        return
+    end
+
+    if event == "NAME_PLATE_UNIT_ADDED" then
+        self:ResetGlows(namePlate)
+        self:UpdateGlows(namePlate)
+    elseif event == "UNIT_AURA" then
+        self:UpdateGlows(namePlate)
     elseif event == "NAME_PLATE_UNIT_REMOVED" then
-        local unit = ...
-        local pool = self.glowPools:GetPool("NamePlatesComplete_AuraGlowTemplate", unit)
-        pool:ReleaseAll()
+        self:ResetGlows(namePlate)
     end
 end
 
-function NamePlatesComplete_AuraGlowDriverMixin:UpdateBuffs(buffs, unit, unitAuraUpdateInfo, auraSettings)
-    local pool = self.glowPools:GetOrCreatePool("Frame", nil, "NamePlatesComplete_AuraGlowTemplate",
-        FramePool_HideAndClearAnchorsWithReset, false, unit)
-
-    local function match(pool, buff)
-        for glow in pool:EnumerateActive() do
-            if glow:Match(buff) then
-                return glow
-            end
-        end
+function NamePlatesComplete_AuraGlowDriverMixin:ResetGlows(namePlate, glows)
+    for _, glow in pairs(namePlate.glows or {}) do
+        self.pool:Release(glow)
     end
 
-    -- mark all glows for removal
-    for glow in pool:EnumerateActive() do
-        glow:SetParent(nil)
-    end
+    namePlate.glows = glows or {}
+end
 
-    -- reuse or init glows on layout changes
-    for _, buff in ipairs({ buffs:GetChildren() }) do
+function NamePlatesComplete_AuraGlowDriverMixin:UpdateGlows(namePlate)
+    local buffs = { namePlate.UnitFrame.BuffFrame:GetChildren() }
+    local currGlows = namePlate.glows
+    local nextGlows = {}
+
+    for _, buff in ipairs(buffs) do
         if buff:IsVisible() and self:ShouldGlow(buff) then
-            local active = match(pool, buff)
-            if active then
+            local id = buff.auraInstanceID
+
+            local active = currGlows[id]
+            if active and active:Match(buff) then -- keep
+                currGlows[id] = nil
                 active:Attach(buff)
-            else
-                active = pool:Acquire()
+            else -- create/replace
+                active = self.pool:Acquire()
                 active:Attach(buff)
                 active:Init()
             end
+            nextGlows[id] = active
         end
     end
 
-    -- sweep to release unattached glows
-    for glow in pool:EnumerateActive() do
-        if not glow:GetParent() then
-            pool:Release(glow)
-        end
-    end
+    self:ResetGlows(namePlate, nextGlows)
 end
 
 function NamePlatesComplete_AuraGlowDriverMixin:ShouldGlow(buff)
@@ -126,7 +123,8 @@ function Aura:Create(buff)
 end
 
 function Aura:Equals(other)
-    return tCompare(self, other)
+    return self.auraInstanceID == other.auraInstanceID
+        and self.expirationTime == other.expirationTime
 end
 
 function Aura:PandemicTime()
@@ -155,6 +153,9 @@ function NamePlatesComplete_AuraGlowMixin:Reset()
     if self.Glow:IsPlaying() then
         self.Glow:Stop()
     end
+
+    self.ProcFlashFlipBook:SetAlpha(0)
+    self.ProcLoopFlipBook:SetAlpha(0)
 end
 
 function NamePlatesComplete_AuraGlowMixin:Attach(buff)
@@ -164,19 +165,22 @@ function NamePlatesComplete_AuraGlowMixin:Attach(buff)
     self:ClearAllPoints()
     self:SetAllPoints(buff)
     self:SetSize(buff:GetSize())
+    self:Show()
 end
 
 function NamePlatesComplete_AuraGlowMixin:Init()
     local pandemicDelay = self.state:PandemicTime() - GetTime()
 
     if pandemicDelay < 0 then
-        self.Glow:Play()
         self:Show()
+        self.Glow:Play()
     else
         self.timer = C_Timer.NewTimer(pandemicDelay, function()
-            self.Flash:Play()
-            self.Glow:Play()
-            self:Show()
+            if self:GetParent():IsVisible() then
+                self:Show()
+                self.Flash:Play()
+                self.Glow:Play()
+            end
         end)
     end
 end
@@ -184,5 +188,5 @@ end
 function NamePlatesComplete_AuraGlowMixin:OnShow()
     local w, h = self:GetSize()
     self.ProcLoopFlipBook:SetSize(w * 1.4, h * 1.4)
-    self.ProcFlashFlipBook:SetSize(w * 3, h * 3)
+    self.ProcFlashFlipBook:SetSize(w * 4, h * 4)
 end
