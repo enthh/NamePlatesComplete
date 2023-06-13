@@ -29,6 +29,7 @@ NamePlatesComplete_AuraGlowDriverMixin = {}
 
 function NamePlatesComplete_AuraGlowDriverMixin:OnLoad()
     self.pool = CreateFramePool("Frame", self, "NamePlatesComplete_AuraGlowTemplate", function(pool, frame)
+        frame:SetParent(self)
         frame:Hide()
         frame:ClearAllPoints()
         frame:Reset()
@@ -56,10 +57,10 @@ function NamePlatesComplete_AuraGlowDriverMixin:OnEvent(event, ...)
     if event == "NAME_PLATE_UNIT_ADDED" then
         self:ResetGlows(namePlate)
         self:UpdateGlows(namePlate)
-    elseif event == "UNIT_AURA" then
-        self:UpdateGlows(namePlate)
     elseif event == "NAME_PLATE_UNIT_REMOVED" then
         self:ResetGlows(namePlate)
+    elseif event == "UNIT_AURA" then
+        self:UpdateGlows(namePlate)
     end
 end
 
