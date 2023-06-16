@@ -6,27 +6,26 @@
 		virtual="true">
 		<Size y="14" />
 		<Layers>
-			<Layer level="BACKGROUND" textureSubLevel="10">
-				<Texture parentKey="TextBorder" atlas="ui-castingbar-textbox" hidden="false">
-					<!-- <Size x="185" y="14" /> -->
+			<Layer level="ARTWORK">
+				<FontString parentKey="Text" inherits="SystemFont_NamePlateCastBar">
+					<Size x="0" y="0" />
 					<Anchors>
-						<Anchor point="TOPLEFT" x="0" y="0" />
-						<Anchor point="BOTTOMRIGHT" x="0" y="0" />
+						<Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" x="0" y="-2" />
 					</Anchors>
-				</Texture>
-				<Texture parentKey="InterruptGlow" atlas="cast_interrupt_outerglow" alpha="0.5"
-					hidden="true">
+				</FontString>
+
+				<Texture parentKey="InterruptSpark" atlas="ui-castingbar-pip">
+					<Size x="6" y="18" />
 				</Texture>
 			</Layer>
 
-			<Layer level="OVERLAY">
-				<FontString parentKey="Text" inherits="SystemFont_Shadow_Small">
-					<Size x="0" y="12" />
+			<Layer level="BACKGROUND" textureSubLevel="0">
+				<!-- <Texture parentKey="TextBorder" atlas="ui-castingbar-textbox" hidden="true">
 					<Anchors>
-						<Anchor point="TOPLEFT" x="3" y="-2" />
-						<Anchor point="BOTTOMRIGHT" x="-3" y="2" />
+						<Anchor relativeKey="$parent.Text" point="TOPLEFT" relativePoint="TOPLEFT" x="-3" y="3" />
+						<Anchor relativeKey="$parent.Text" point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="3" y="-3" />
 					</Anchors>
-				</FontString>
+				</Texture> -->
 			</Layer>
 		</Layers>
 		<Scripts>
