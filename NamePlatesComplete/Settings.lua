@@ -1,17 +1,13 @@
-SettingsTableDB = {
-    TableSettingValues = {
-        1, 2, 3
-    }
-}
+local _, priv = ...
 
-local function CreateSettingsSpellSearchInitializer(name, searchText, onSpellAdded, tooltip)
+function NamePlatesComplete.CreateSettingsSpellSearchInitializer(name, searchText, onSpellAdded, tooltip)
     local data = { name = name, searchText = searchText, onSpellAdded = onSpellAdded, tooltip = tooltip }
     local initializer = Settings.CreateElementInitializer("NamePlatesCompleteSpellSelectorTemplate", data)
     initializer:AddSearchTags(name)
     return initializer
 end
 
-local function CreateSettingsSpellInitializerData(spellID, onSpellRemoved)
+function NamePlatesComplete.CreateSettingsSpellInitializerData(spellID, onSpellRemoved)
     local name, _, icon, _, _, _, spellID, _ = GetSpellInfo(spellID)
     local tooltip = GetSpellDescription(spellID)
     if name then
@@ -19,82 +15,71 @@ local function CreateSettingsSpellInitializerData(spellID, onSpellRemoved)
     end
 end
 
-local function CreateSettingsSpellInitializer(data)
+function NamePlatesComplete.CreateSettingsSpellInitializer(data)
     local initializer = Settings.CreateElementInitializer("NamePlatesCompleteSpellTemplate", data)
     initializer:AddSearchTags(data.name)
     return initializer
 end
 
-local function SaveSetting(_, setting, value)
-    local variable = setting:GetVariable()
-    SettingsTableDB[variable] = value
-end
+function NamePlatesComplete.CreateSpellList(category, setting, heading)
+    local layout = SettingsPanel:GetLayout(category)
 
-local function InitSettingsLayout(layout, setting)
-    assert(setting:GetVariableType() == "table")
+    local function remove(spellID)
+        local tbl = setting:GetValue()
+        for i = 1, #tbl do
+            if tbl[i] == spellID then
+                table.remove(tbl, i)
+            end
+        end
+        setting:SetValue(tbl, true)
+    end
+
+    local function add(spellID)
+        local tbl = setting:GetValue()
+        remove(spellID)
+        table.insert(tbl, 1, spellID)
+        setting:SetValue(tbl, true)
+    end
 
     do
-        local function OnSpellSelected(name, spellID)
-            local tbl = setting:GetValue()
-            table.insert(tbl, 1, spellID)
-            setting:SetValue(tbl, true)
-        end
-        local name = "Add a spell"
-        local searchText = "Search Spell ID or Name"
-        local tooltipText = "Press me"
-        local initializer = CreateSettingsSpellSearchInitializer(name, searchText, OnSpellSelected,
-            tooltipText)
+        local search = "Search Spell ID or Name. Press enter to add."
+        local tooltip = "Enter a spell name or spell ID until the icon appears. Press enter to add."
+        local initializer = NamePlatesComplete.CreateSettingsSpellSearchInitializer(
+            heading, search, add, tooltip)
         layout:AddInitializer(initializer)
     end
 
     do
         for _, spellID in ipairs(setting:GetValue()) do
-            local function OnSpellRemoved(spellID)
-                local tbl = setting:GetValue()
-                for i = 1, #tbl do
-                    if tbl[i] == spellID then
-                        table.remove(tbl, i)
-                    end
-                end
-                setting:SetValue(tbl, true)
-            end
-
-            local data = CreateSettingsSpellInitializerData(spellID, OnSpellRemoved)
+            local data = NamePlatesComplete.CreateSettingsSpellInitializerData(spellID, remove)
             if data then
-                local initializer = CreateSettingsSpellInitializer(data)
+                local initializer = NamePlatesComplete.CreateSettingsSpellInitializer(data)
                 layout:AddInitializer(initializer)
             end
         end
     end
 end
 
+function NamePlatesComplete.ReloadInitializers(settingsCategory, initializeFunc)
+    local layout = SettingsPanel:GetLayout(settingsCategory)
+    local initializers = layout:GetInitializers()
+
+    for _, init in ipairs(initializers) do
+        init:AddShownPredicate(function() return false end)
+    end
+    table.wipe(initializers)
+
+    initializeFunc()
+
+    SettingsInbound.RepairDisplay()
+end
+
 local function RegisterSettings()
-    local category, layout = Settings.RegisterVerticalLayoutCategory("Dynamic Vertical Settings Example")
-
-    -- This is the interface between Settings/Options UI and the addon tables
-    local name = "Example Table Setting"
-    local variable = "TableSettingValues"
-    local defaultValue = SettingsTableDB[variable]
-    local setting = Settings.RegisterAddOnSetting(category, name, variable, type(defaultValue), defaultValue)
-
-    Settings.SetOnValueChangedCallback(variable, SaveSetting)
-    Settings.SetOnValueChangedCallback(variable, function()
-        -- Reset the layout
-        -- ShouldShow() == false removes SettingsList elements by filtering the initializer from the SettingsList ScrollBox DataProvider
-        for _, init in ipairs(layout:GetInitializers()) do
-            init:AddShownPredicate(function() return false end)
-        end
-        table.wipe(layout:GetInitializers())
-
-        InitSettingsLayout(layout, setting)
-
-        SettingsInbound.RepairDisplay()
-    end)
-
-    InitSettingsLayout(layout, setting)
-
+    local category = Settings.RegisterVerticalLayoutCategory("Nameplates Complete")
     Settings.RegisterAddOnCategory(category)
     Settings.OpenToCategory(category.ID)
+
+    NamePlatesComplete.SettingsCategory = category
 end
 
 SettingsRegistrar:AddRegistrant(RegisterSettings)
@@ -109,13 +94,7 @@ end
 function NamePlatesCompleteSpellSelectorMixin:Init(initializer)
     SettingsListSectionHeaderMixin.Init(self, initializer)
 
-    -- local tooltip = GenerateClosure(Settings.InitTooltip, "stuff", "morestuff")
-    -- self.Tooltip:SetTooltipFunc(GenerateClosure(InitializeSettingTooltip, initializer))
     self.Tooltip:SetCustomTooltipAnchoring(self.SearchBox, "ANCHOR_LEFT", 0, 0)
-    self.Tooltip.tooltipText = "Ohai"
-
-    self.Tooltip:HookScript("OnEnter", function() print("enter") end)
-    print("search init")
 end
 
 function NamePlatesCompleteSpellSelectorMixin:OnSearchTextChanged()
@@ -126,7 +105,7 @@ function NamePlatesCompleteSpellSelectorMixin:OnSearchTextChanged()
         self.Icon:SetTexture(icon)
         self.Icon:Show()
 
-        self.Tooltip.tooltipText = GetSpellDescription(spellID) .. "\r" .. spellID
+        self.Tooltip.tooltipText = GetSpellDescription(spellID) .. "\r\r|cnGRAY_FONT_COLOR:" .. spellID .. "|r"
         self.Tooltip:OnEnter()
     else
         self.Tooltip.tooltipText = "Search for a spell name or ID to add"
@@ -141,7 +120,7 @@ function NamePlatesCompleteSpellSelectorMixin:OnSearchEnterPressed()
     if name then
         local initializer = self:GetElementData()
         local data = initializer:GetData()
-        data.onSpellAdded(name, spellID)
+        data.onSpellAdded(spellID)
         self.SearchBox:SetText("")
     end
 end
@@ -156,13 +135,13 @@ end
 function NamePlatesCompleteSpellMixin:OnCloseButtonClicked()
     local initializer = self:GetElementData()
     local data = initializer:GetData()
-    DevTools_Dump(data)
     data.onSpellRemoved(data.spellID)
 end
 
 function NamePlatesCompleteSpellMixin:Init(initializer)
     SettingsListElementMixin.Init(self, initializer)
 
-    local data  = initializer:GetData()
+    local data = initializer:GetData()
+    self.Text:SetText(data.name .. " |cnGRAY_FONT_COLOR:" .. data.spellID .. "|r")
     self.Icon:SetTexture(data.icon)
 end

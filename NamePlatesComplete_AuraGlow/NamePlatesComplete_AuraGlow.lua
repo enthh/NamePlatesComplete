@@ -1,3 +1,5 @@
+local addOn, priv = ...
+
 --[[
 
 NamePlatesComplete_AuraGlow
@@ -24,10 +26,42 @@ Buff to Glow lifecycle matches spell details of the buff:
 
 ]]
 
+priv.defaultGlowSpellIDs = {
+    DEATHKNIGHT = {
+        55078, -- Blood Plague
+    },
+    DRUID = {
+        155722, -- Rake
+        1079,   -- Rip
+        405233, -- Thrash Feral
+        192090, -- Thrash
+        155625, -- Moonfire Feral
+        164812, -- Moonfire
+        164815, -- Sunfire
+        202347, -- Stellar flare
+        5217,   -- Tiger's fury (player nameplate)
+    },
+    EVOKER = {
+        357209, -- Fire Breath
+    },
+    HUNTER = {
+        271788, -- Serpent Sting
+    },
+    MAGE = {
+        114923, -- Nether Tempest
+    },
+    PRIEST = {
+        34914,  -- Vampric Touch
+        589,    -- Shadow Word: Pain
+        335467, -- Devouring Plague
+    }
+}
 
 NamePlatesComplete_AuraGlowDriverMixin = {}
 
 function NamePlatesComplete_AuraGlowDriverMixin:OnLoad()
+    self.spellIDs = {}
+
     self.pool = CreateFramePool("Frame", self, "NamePlatesComplete_AuraGlowTemplate", function(pool, frame)
         frame:SetParent(self)
         frame:Hide()
@@ -35,32 +69,50 @@ function NamePlatesComplete_AuraGlowDriverMixin:OnLoad()
         frame:Reset()
     end)
 
-    self.spellIDs = {
-        [155722] = true, -- rake
-        [1079] = true,   -- rip
-        [405233] = true, -- thrash
-        [155625] = true, -- moonfire
-    }
-
+    self:RegisterEvent("ADDON_LOADED")
     self:RegisterEvent("NAME_PLATE_UNIT_ADDED")
     self:RegisterEvent("NAME_PLATE_UNIT_REMOVED")
     self:RegisterEvent("UNIT_AURA")
 end
 
-function NamePlatesComplete_AuraGlowDriverMixin:OnEvent(event, ...)
-    local unit = ...
-    local namePlate = C_NamePlate.GetNamePlateForUnit(unit)
-    if not namePlate then
-        return
+function NamePlatesComplete_AuraGlowDriverMixin:InitDB(force)
+    if NamePlatesCompleteAuraGlowDB == nil then
+        NamePlatesCompleteAuraGlowDB = {
+            version = 1,
+        }
     end
 
-    if event == "NAME_PLATE_UNIT_ADDED" then
-        self:ResetGlows(namePlate)
-        self:UpdateGlows(namePlate)
-    elseif event == "NAME_PLATE_UNIT_REMOVED" then
-        self:ResetGlows(namePlate)
-    elseif event == "UNIT_AURA" then
-        self:UpdateGlows(namePlate)
+    if force or (NamePlatesCompleteAuraGlowDB.glowSpellIDs == nil) then
+        NamePlatesCompleteAuraGlowDB.glowSpellIDs = priv.defaultGlowSpellIDs[UnitClassBase("player")] or {}
+    end
+end
+
+function NamePlatesComplete_AuraGlowDriverMixin:Init(options)
+    self.spellIDs = {}
+    for i, spellID in ipairs(options.glowSpellIDs) do
+        self.spellIDs[spellID] = true
+    end
+end
+
+function NamePlatesComplete_AuraGlowDriverMixin:OnEvent(event, ...)
+    if event == "ADDON_LOADED" and select(1, ...) == addOn then
+        self:InitDB()
+        self:Init(NamePlatesCompleteAuraGlowDB)
+    else
+        local unit = ...
+        local namePlate = C_NamePlate.GetNamePlateForUnit(unit)
+        if not namePlate then
+            return
+        end
+
+        if event == "NAME_PLATE_UNIT_ADDED" then
+            self:ResetGlows(namePlate)
+            self:UpdateGlows(namePlate)
+        elseif event == "NAME_PLATE_UNIT_REMOVED" then
+            self:ResetGlows(namePlate)
+        elseif event == "UNIT_AURA" then
+            self:UpdateGlows(namePlate)
+        end
     end
 end
 
