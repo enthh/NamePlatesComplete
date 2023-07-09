@@ -1,11 +1,204 @@
-<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
-..\..\FrameXML\UI.xsd">
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Meorawr/wow-ui-schema/main/UI.xsd">
 	<Script file="NamePlatesComplete.lua" />
+	<Script file="Settings.lua" />
 
 	<Frame name="NamePlatesCompleteDriverFrame" toplevel="true" mixin="NamePlatesCompleteDriverMixin">
 		<Scripts>
 			<OnLoad method="OnLoad" />
 			<OnEvent method="OnEvent" />
 		</Scripts>
+	</Frame>
+
+	<Frame name="NamePlatesCompleteOptionsFrame" toplevel="true">
+		<KeyValues>
+			<KeyValue key="name" value="NamePlates Complete" />
+		</KeyValues>
+
+		<Scripts>
+		</Scripts>
+	</Frame>
+
+	<Frame name="NamePlatesCompleteListElementTemplate" mixin="SettingsListElementMixin" virtual="true">
+		<Layers>
+			<Layer level="OVERLAY">
+				<FontString parentKey="Text" inherits="GameFontNormal" justifyH="LEFT" wordwrap="false" />
+			</Layer>
+		</Layers>
+		<Frames>
+			<Frame parentKey="Tooltip" mixin="DefaultTooltipMixin">
+				<Anchors>
+					<Anchor point="TOPLEFT" />
+					<Anchor point="BOTTOMRIGHT" relativePoint="BOTTOM" x="-80" />
+				</Anchors>
+				<Layers>
+					<Layer level="BACKGROUND">
+						<Texture parentKey="HoverBackground" inherits="HoverBackgroundTemplate" />
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnLoad method="OnLoad" />
+				</Scripts>
+			</Frame>
+			<Frame parentKey="NewFeature" inherits="NewFeatureLabelTemplate" frameStrata="HIGH" scale=".8" frameLevel="100" hidden="true">
+				<Size x="1" y="1" />
+				<Anchors>
+					<Anchor point="RIGHT" relativeKey="$parent.Text" relativePoint="LEFT" x="-37" y="3" />
+				</Anchors>
+			</Frame>
+		</Frames>
+	</Frame>
+
+	<Frame name="NamePlatesCompleteAuraElementTemplate" inherits="SettingsDropDownControlTemplate" mixin="NamePlatesCompleteAuraSelectorMixin" virtual="true">
+		<Size x="280" y="26" />
+		<Layers>
+			<Layer level="OVERLAY">
+				<Texture parentKey="Icon"
+					file="Interface\AddOns\NamePlatesComplete_AuraGlow\flash1024.PNG">
+					<Size x="24" y="24" />
+					<Anchors>
+						<Anchor point="LEFT" relativePoint="CENTER" x="-80" y="0" />
+					</Anchors>
+				</Texture>
+			</Layer>
+		</Layers>
+		<KeyValues>
+			<KeyValue key="dropDownType" value="Frame" type="string" />
+			<KeyValue key="dropDownTemplate" value="SettingsSelectionPopoutWithButtonsTemplate" type="string" />
+		</KeyValues>
+		<Frames>
+			<!-- <EditBox parentKey="SearchBox" inherits="SearchBoxTemplate" autoFocus="false" historyLines="1" bytes="64" frameLevel="7">
+				<Size x="160" y="22"/>
+				<Anchors>
+					<Anchor point="LEFT" relativeKey="$parent.Text" relativePoint="LEFT" x="0" y="0"/>
+				</Anchors>
+			</EditBox> -->
+
+			<Frame parentKey="DropDown" inherits="SettingsSelectionPopoutWithButtonsTemplate">
+				<Size x="280" y="26" />
+				<Anchors>
+					<Anchor point="LEFT" relativeKey="$parent.Icon" relativePoint="RIGHT" x="50" y="0" />
+				</Anchors>
+			</Frame>
+
+			<Button parentKey="CloseButton" inherits="UIPanelCloseButtonNoScripts" hidden="false">
+				<Size x="22" y="22" />
+				<Anchors>
+					<Anchor point="TOPRIGHT" x="1" y="0" />
+				</Anchors>
+				<!-- <Anchors>
+					<Anchor point="RIGHT" relativePoint="RIGHT"/>
+				</Anchors> -->
+
+			</Button>
+		</Frames>
+		<Scripts>
+			<OnLoad method="OnLoad" />
+		</Scripts>
+	</Frame>
+
+	<Frame name="NamePlatesCompleteSpellListElementTemplate" inherits="SettingsListElementTemplate" mixin="NamePlatesCompleteSpellListElementTemplate" virtual="true">
+		<Size x="160" y="26" />
+		<Layers>
+			<Layer level="OVERLAY">
+				<FontString parentKey="Text" inherits="GameFontNormal" justifyH="LEFT" wordwrap="false" />
+				<Texture parentKey="Icon"
+					file="Interface\AddOns\NamePlatesComplete_AuraGlow\flash1024.PNG" hidden="false">
+					<Size x="24" y="24" />
+					<Anchors>
+						<Anchor point="LEFT" relativePoint="CENTER" x="-80" y="0" />
+					</Anchors>
+				</Texture>
+			</Layer>
+		</Layers>
+	</Frame>
+
+	<Frame name="NPCSettingsListTemplate" mixin="NPCSettingsListMixin" virtual="true">
+		<Size x="280" y="26" />
+		<Frames>
+			<Frame parentKey="ScrollBox" inherits="WowScrollBoxList">
+				<!-- <Frames>
+					<Button parentKey="InputBlocker" clipChildren="true" setAllPoints="true" hidden="true"/>
+				</Frames> -->
+			</Frame>
+			<EventFrame parentKey="ScrollBar" inherits="MinimalScrollBar">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeKey="$parent.ScrollBox" relativePoint="TOPRIGHT" x="0" y="-4" />
+					<Anchor point="BOTTOMLEFT" relativeKey="$parent.ScrollBox" relativePoint="BOTTOMRIGHT" x="-1" y="-3" />
+				</Anchors>
+			</EventFrame>
+		</Frames>
+		<Scripts>
+			<OnLoad method="OnLoad" />
+		</Scripts>
+	</Frame>
+
+	<Frame name="NamePlatesCompleteSpellSelectorTemplate" inherits="SettingsListSectionHeaderTemplate" mixin="NamePlatesCompleteSpellSelectorMixin" virtual="true">
+		<Layers>
+			<Layer level="ARTWORK">
+				<Texture parentKey="Icon" hidden="false">
+					<Size x="24" y="24" />
+					<Anchors>
+						<Anchor point="LEFT" relativePoint="CENTER" x="-80" y="0" />
+					</Anchors>
+				</Texture>
+			</Layer>
+		</Layers>
+		<Frames>
+			<EditBox parentKey="SearchBox" inherits="SearchBoxTemplate" autoFocus="false" historyLines="1" bytes="64" frameLevel="7">
+				<Size x="160" y="22" />
+				<Anchors>
+					<Anchor point="LEFT" relativePoint="CENTER" x="-40" y="0" />
+				</Anchors>
+			</EditBox>
+			<Frame parentKey="Tooltip" mixin="DefaultTooltipMixin">
+				<Anchors>
+					<Anchor point="TOPLEFT" />
+					<Anchor point="BOTTOMRIGHT" relativePoint="BOTTOM" x="-80" />
+				</Anchors>
+				<Layers>
+					<Layer level="BACKGROUND">
+						<Texture parentKey="HoverBackground" inherits="HoverBackgroundTemplate" />
+					</Layer>
+				</Layers>
+				<Scripts>
+					<OnLoad method="OnLoad" />
+				</Scripts>
+			</Frame>
+		</Frames>
+		<Scripts>
+			<OnLoad method="OnLoad" />
+		</Scripts>
+	</Frame>
+
+	<Frame name="NamePlatesCompleteSpellTemplate" inherits="SettingsListElementTemplate" mixin="NamePlatesCompleteSpellMixin" virtual="true">
+		<Size x="280" y="26"/>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture parentKey="Icon" hidden="false">
+					<Size x="24" y="24" />
+					<Anchors>
+						<Anchor point="LEFT" relativePoint="CENTER" x="-80" y="0" />
+					</Anchors>
+				</Texture>
+			</Layer>
+		</Layers>
+		<Frames>
+			<Button parentKey="CloseButton" inherits="UIPanelCloseButtonNoScripts" hidden="false">
+				<Size x="22" y="22" />
+				<Anchors>
+					<Anchor point="RIGHT" relativeKey="$parent.Text" relativePoint="LEFT" x="-7" y="0" />
+				</Anchors>
+			</Button>
+		</Frames>
+		<Scripts>
+			<OnLoad method="OnLoad" />
+		</Scripts>
+	</Frame>
+
+	<Frame name="NamePlatesCompleteOptions" mixin="NamePlatesCompleteOptionsMixin" virtual="true">
+		<Frames>
+			<Frame parentKey="SettingsList" inherits="SettingsListTemplate" setAllPoints="true" />
+		</Frames>
 	</Frame>
 </Ui>
