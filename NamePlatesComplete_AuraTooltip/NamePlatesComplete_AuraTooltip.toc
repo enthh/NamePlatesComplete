@@ -1,6 +1,6 @@
 ## Interface: 100100
 ## Title: NamePlates - Aura Tooltip
-## Notes: Blizzard nameplate aura tooltip clickthrough or other options
+## Notes: Move while hovering over nameplate auras and tooltips
 ## Author: Enth-Emerald Dream
 ## Version: @project-version@
 ## X-Website: https://www.curseforge.com/wow/addons/nameplates_complete

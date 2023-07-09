@@ -1,4 +1,4 @@
-NamePlatesComplete_AuraTooltipDriverMixin = {}
+local NamePlatesComplete_AuraTooltipDriverMixin = {}
 
 function NamePlatesComplete_AuraTooltipDriverMixin:OnLoad()
     self:RegisterEvent("NAME_PLATE_UNIT_ADDED")
@@ -26,8 +26,11 @@ end
 
 function NamePlatesComplete_AuraTooltipDriverMixin:UpdateBuffs(buffFrame, unit, unitAuraUpdateInfo)
     for _, buff in ipairs({ buffFrame:GetChildren() }) do
-        if buff:IsMouseEnabled() then
+        if buff:IsMouseEnabled() or not buff:IsMouseMotionEnabled() then
             buff:EnableMouse(false)
+            buff:EnableMouseMotion(true)
         end
     end
 end
+
+_G["NamePlatesComplete_AuraTooltipDriverMixin"] = NamePlatesComplete_AuraTooltipDriverMixin
