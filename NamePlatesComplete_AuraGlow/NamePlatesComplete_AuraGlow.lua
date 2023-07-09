@@ -69,50 +69,32 @@ function NamePlatesComplete_AuraGlowDriverMixin:OnLoad()
         frame:Reset()
     end)
 
-    self:RegisterEvent("ADDON_LOADED")
     self:RegisterEvent("NAME_PLATE_UNIT_ADDED")
     self:RegisterEvent("NAME_PLATE_UNIT_REMOVED")
     self:RegisterEvent("UNIT_AURA")
 end
 
-function NamePlatesComplete_AuraGlowDriverMixin:InitDB(force)
-    if NamePlatesCompleteAuraGlowDB == nil then
-        NamePlatesCompleteAuraGlowDB = {
-            version = 1,
-        }
-    end
-
-    if force or (NamePlatesCompleteAuraGlowDB.glowSpellIDs == nil) then
-        NamePlatesCompleteAuraGlowDB.glowSpellIDs = priv.defaultGlowSpellIDs[UnitClassBase("player")] or {}
-    end
-end
-
 function NamePlatesComplete_AuraGlowDriverMixin:Init(options)
-    self.spellIDs = {}
-    for i, spellID in ipairs(options.glowSpellIDs) do
+    table.wipe(self.spellIDs)
+    for _, spellID in ipairs(options.glowSpellIDs) do
         self.spellIDs[spellID] = true
     end
 end
 
 function NamePlatesComplete_AuraGlowDriverMixin:OnEvent(event, ...)
-    if event == "ADDON_LOADED" and select(1, ...) == addOn then
-        self:InitDB()
-        self:Init(NamePlatesCompleteAuraGlowDB)
-    else
-        local unit = ...
-        local namePlate = C_NamePlate.GetNamePlateForUnit(unit)
-        if not namePlate then
-            return
-        end
+    local unit = ...
+    local namePlate = C_NamePlate.GetNamePlateForUnit(unit)
+    if not namePlate then
+        return
+    end
 
-        if event == "NAME_PLATE_UNIT_ADDED" then
-            self:ResetGlows(namePlate)
-            self:UpdateGlows(namePlate)
-        elseif event == "NAME_PLATE_UNIT_REMOVED" then
-            self:ResetGlows(namePlate)
-        elseif event == "UNIT_AURA" then
-            self:UpdateGlows(namePlate)
-        end
+    if event == "NAME_PLATE_UNIT_ADDED" then
+        self:ResetGlows(namePlate)
+        self:UpdateGlows(namePlate)
+    elseif event == "NAME_PLATE_UNIT_REMOVED" then
+        self:ResetGlows(namePlate)
+    elseif event == "UNIT_AURA" then
+        self:UpdateGlows(namePlate)
     end
 end
 

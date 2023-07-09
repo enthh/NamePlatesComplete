@@ -60,18 +60,42 @@ function NamePlatesComplete.CreateSpellList(category, setting, heading)
     end
 end
 
-function NamePlatesComplete.ReloadInitializers(settingsCategory, initializeFunc)
-    local layout = SettingsPanel:GetLayout(settingsCategory)
-    local initializers = layout:GetInitializers()
+function NamePlatesComplete.RegisterSavedSetting(category, saved, name, variable, default)
+    local setting = Settings.RegisterAddOnSetting(category, name, variable, type(default), default)
 
-    for _, init in ipairs(initializers) do
-        init:AddShownPredicate(function() return false end)
+    setting:SetValue(saved[variable])
+    Settings.SetOnValueChangedCallback(variable, function(_, modifiedSetting, value)
+        saved[modifiedSetting:GetVariable()] = value
+    end)
+
+    if setting:GetValue() == nil then
+        setting:SetValueToDefault()
     end
-    table.wipe(initializers)
 
-    initializeFunc()
+    return setting
+end
 
-    SettingsInbound.RepairDisplay()
+function NamePlatesComplete.LayoutSettings(category, layoutFunc, ...)
+    local initialize = GenerateClosure(layoutFunc, category, ...)
+
+    local function reset(initializers)
+        for _, init in ipairs(initializers) do
+            init:AddShownPredicate(function() return false end)
+        end
+        table.wipe(initializers)
+    end
+
+    local function reload()
+        reset(SettingsPanel:GetLayout(category):GetInitializers())
+        initialize()
+        SettingsInbound.RepairDisplay()
+    end
+
+    for _, setting in ipairs({...}) do
+        Settings.SetOnValueChangedCallback(setting:GetVariable(), reload)
+    end
+
+    initialize()
 end
 
 local function RegisterSettings()

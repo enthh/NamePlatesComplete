@@ -1,22 +1,13 @@
 local addOn, priv = ...
 
-local function Save(_, setting, value)
-    local variable = setting:GetVariable()
-    NamePlatesCompleteAuraGlowDB[variable] = value
-    NamePlatesComplete_AuraGlowDriverFrame:Init(NamePlatesCompleteAuraGlowDB)
+local function MigrateDB()
+    if NamePlatesCompleteAuraGlowDB == nil then
+        NamePlatesCompleteAuraGlowDB = { version = 1 }
+    end
 end
 
-local function CreateSavedSetting(category, name, variable, default)
-    local setting = Settings.RegisterAddOnSetting(category, name, variable, type(default), default)
-    setting:SetValue(NamePlatesCompleteAuraGlowDB[variable])
-
-    Settings.SetOnValueChangedCallback(variable, Save)
-
-    if setting:GetValue() == nil then
-        setting:SetValueToDefault()
-    end
-
-    return setting
+local function Reload()
+    NamePlatesComplete_AuraGlowDriverFrame:Init(NamePlatesCompleteAuraGlowDB)
 end
 
 local function Layout(category, spells)
@@ -24,18 +15,17 @@ local function Layout(category, spells)
 end
 
 local function Register()
+    MigrateDB()
+
     local category = Settings.RegisterVerticalLayoutSubcategory(NamePlatesComplete.SettingsCategory, "Aura Glows")
+    local spells = NamePlatesComplete.RegisterSavedSetting(category, NamePlatesCompleteAuraGlowDB, "Glow Spells",
+        "glowSpellIDs", priv.defaultGlowSpellIDs[UnitClassBase("player")])
 
-    local spells = CreateSavedSetting(category, "Glow Spells", "glowSpellIDs",
-        priv.defaultGlowSpellIDs[UnitClassBase("player")])
-
-    local layout = GenerateClosure(Layout, category, spells)
-    local reload = GenerateClosure(NamePlatesComplete.ReloadInitializers, category, layout)
-    Settings.SetOnValueChangedCallback(spells:GetVariable(), reload)
-
-    layout()
-
+    NamePlatesComplete.LayoutSettings(category, Layout, spells)
     Settings.RegisterAddOnCategory(category)
+
+    Settings.SetOnValueChangedCallback(spells:GetVariable(), Reload)
+    Reload()
 end
 
 -- SettingsRegistrar:AddRegistrant(function() xpcall(Register, geterrorhandler()) end)
