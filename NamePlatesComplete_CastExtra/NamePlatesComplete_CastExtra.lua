@@ -290,6 +290,10 @@ function NamePlatesComplete_CastExtraMixin:OnCombatLog(timestamp, subevent, hide
                                                        destGUID, destName, destFlags, destRaidFlags, ...)
     if subevent == "SPELL_INTERRUPT" then
         local sourceUnit = UnitTokenFromGUID(sourceGUID)
+        if sourceUnit == nil then
+            return
+        end
+
         self.state.interruptSourceUnit = sourceUnit
         self.state.interruptSourceName = sourceName
         self.state.interruptSourceGUID = sourceGUID
