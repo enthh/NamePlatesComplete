@@ -1,4 +1,36 @@
-local addOn, priv = ...
+local _, ns = ...
+
+local defaultGlowSpellIDs = {
+    DEATHKNIGHT = {
+        55078, -- Blood Plague
+    },
+    DRUID = {
+        155722, -- Rake
+        1079,   -- Rip
+        405233, -- Thrash Feral
+        192090, -- Thrash
+        155625, -- Moonfire Feral
+        164812, -- Moonfire
+        164815, -- Sunfire
+        202347, -- Stellar flare
+        5217,   -- Tiger's fury (player nameplate)
+    },
+    EVOKER = {
+        357209, -- Fire Breath
+    },
+    HUNTER = {
+        271788, -- Serpent Sting
+    },
+    MAGE = {
+        114923, -- Nether Tempest
+    },
+    PRIEST = {
+        34914,  -- Vampric Touch
+        589,    -- Shadow Word: Pain
+        335467, -- Devouring Plague
+    }
+}
+
 
 local function MigrateDB()
     if NamePlatesCompleteAuraGlowDB == nil then
@@ -7,7 +39,7 @@ local function MigrateDB()
 end
 
 local function Reload()
-    NamePlatesComplete_AuraGlowDriverFrame:Init(NamePlatesCompleteAuraGlowDB)
+    ns.driver:Init(NamePlatesCompleteAuraGlowDB)
 end
 
 local function Layout(category, spells)
@@ -19,7 +51,7 @@ local function Register()
 
     local category = Settings.RegisterVerticalLayoutSubcategory(NamePlatesComplete.SettingsCategory, "Aura Glows")
     local spells = NamePlatesComplete.RegisterSavedSetting(category, NamePlatesCompleteAuraGlowDB, "Glow Spells",
-        "glowSpellIDs", priv.defaultGlowSpellIDs[UnitClassBase("player")])
+        "glowSpellIDs", defaultGlowSpellIDs[UnitClassBase("player")])
 
     NamePlatesComplete.LayoutSettings(category, Layout, spells)
     Settings.RegisterAddOnCategory(category)

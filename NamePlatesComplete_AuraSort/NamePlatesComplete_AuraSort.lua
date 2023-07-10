@@ -1,16 +1,11 @@
-local addonName, _ = ...
+local _, ns = ...
 
 NamePlatesComplete_AuraSortDriverMixin = {}
 
 function NamePlatesComplete_AuraSortDriverMixin:OnLoad()
-    self.spells = {
-        155722, -- rake = 155722,
-        1079,   -- rip = 1079,
-        405233, -- thrash = 405233,
-        155625, -- moonfire = 155625,
-    }
-    self:Refresh()
+    ns.driver = self
 
+    self.spells = {}
     self:RegisterEvent("NAME_PLATE_UNIT_ADDED")
 end
 
@@ -51,9 +46,9 @@ function NamePlatesComplete_AuraSortDriverMixin:SetupHook(namePlate)
     end
 end
 
-function NamePlatesComplete_AuraSortDriverMixin:Refresh()
+function NamePlatesComplete_AuraSortDriverMixin:Init(options)
     self.spellOrder = {}
-    for i, spellID in ipairs(self.spells) do
+    for i, spellID in ipairs(options.sortedSpellIDs) do
         self.spellOrder[spellID] = i - #self.spells
     end
 end

@@ -1,4 +1,4 @@
-local addOn, priv = ...
+local _, ns = ...
 
 --[[
 
@@ -26,40 +26,11 @@ Buff to Glow lifecycle matches spell details of the buff:
 
 ]]
 
-priv.defaultGlowSpellIDs = {
-    DEATHKNIGHT = {
-        55078, -- Blood Plague
-    },
-    DRUID = {
-        155722, -- Rake
-        1079,   -- Rip
-        405233, -- Thrash Feral
-        192090, -- Thrash
-        155625, -- Moonfire Feral
-        164812, -- Moonfire
-        164815, -- Sunfire
-        202347, -- Stellar flare
-        5217,   -- Tiger's fury (player nameplate)
-    },
-    EVOKER = {
-        357209, -- Fire Breath
-    },
-    HUNTER = {
-        271788, -- Serpent Sting
-    },
-    MAGE = {
-        114923, -- Nether Tempest
-    },
-    PRIEST = {
-        34914,  -- Vampric Touch
-        589,    -- Shadow Word: Pain
-        335467, -- Devouring Plague
-    }
-}
-
 NamePlatesComplete_AuraGlowDriverMixin = {}
 
 function NamePlatesComplete_AuraGlowDriverMixin:OnLoad()
+    ns.driver = self
+
     self.spellIDs = {}
 
     self.pool = CreateFramePool("Frame", self, "NamePlatesComplete_AuraGlowTemplate", function(pool, frame)
