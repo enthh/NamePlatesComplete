@@ -1,11 +1,38 @@
 local _, ns = ...
 
+ns.spellOrder = {}
+ns.hooks = {}
+
+function ns:Init(options)
+    self.spellOrder = {}
+    for i, spellID in ipairs(options.sortedSpellIDs) do
+        self.spellOrder[spellID] = i - #options.sortedSpellIDs
+    end
+end
+
+function ns:Compare(a, b)
+    local aOrder = self.spellOrder[a.spellId]
+    local bOrder = self.spellOrder[b.spellId]
+    if aOrder or bOrder then
+        return (aOrder or a.auraInstanceID) < (bOrder or b.auraInstanceID)
+    end
+
+    return AuraUtil.DefaultAuraCompare(a, b)
+end
+
+function ns:HookAuras(frame)
+    if not self.hooks[frame] then
+        self.hooks[frame] = true
+
+        local compare = GenerateClosure(self.Compare, self)
+        local ordered = TableUtil.CreatePriorityTable(compare, TableUtil.Constants.AssociativePriorityTable)
+        frame.auras = ordered
+    end
+end
+
 NamePlatesComplete_AuraSortDriverMixin = {}
 
 function NamePlatesComplete_AuraSortDriverMixin:OnLoad()
-    ns.driver = self
-
-    self.spells = {}
     self:RegisterEvent("NAME_PLATE_UNIT_ADDED")
 end
 
@@ -28,37 +55,7 @@ function NamePlatesComplete_AuraSortDriverMixin:SetupHook(namePlate)
         return
     end
 
-    if buffFrame and buffFrame.auras == nil or buffFrame.__np_complete_auras == nil then
-        if buffFrame.__np_complete_auras and buffFrame.__np_complete_auras ~= buffFrame.auras then
-            print(addonName .. ": An unknown addon modified aura sorting. Please disable other nameplate addons.")
-        end
+    ns:HookAuras(buffFrame)
 
-        local ordered = TableUtil.CreatePriorityTable(
-            function(a, b)
-                return self:Compare(a, b)
-            end,
-            TableUtil.Constants.AssociativePriorityTable)
-
-        buffFrame.__np_complete_auras = ordered
-        buffFrame.auras = ordered
-
-        NamePlateDriverFrame:OnUnitAuraUpdate(namePlate.namePlateUnitToken, { isFullUpdate = true })
-    end
-end
-
-function NamePlatesComplete_AuraSortDriverMixin:Init(options)
-    self.spellOrder = {}
-    for i, spellID in ipairs(options.sortedSpellIDs) do
-        self.spellOrder[spellID] = i - #self.spells
-    end
-end
-
-function NamePlatesComplete_AuraSortDriverMixin:Compare(a, b)
-    local aOrder = self.spellOrder[a.spellId]
-    local bOrder = self.spellOrder[b.spellId]
-    if aOrder or bOrder then
-        return (aOrder or a.auraInstanceID) < (bOrder or b.auraInstanceID)
-    end
-
-    return AuraUtil.DefaultAuraCompare(a, b)
+    NamePlateDriverFrame:OnUnitAuraUpdate(namePlate.namePlateUnitToken, { isFullUpdate = true })
 end

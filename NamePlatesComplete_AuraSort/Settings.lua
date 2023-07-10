@@ -24,7 +24,7 @@ local function MigrateDB()
 end
 
 local function Reload()
-    ns.driver:Init(NamePlatesCompleteAuraSortDB)
+    ns:Init(NamePlatesCompleteAuraSortDB)
 end
 
 local function Layout(category, spells)

@@ -39,7 +39,7 @@ local function MigrateDB()
 end
 
 local function Reload()
-    ns.driver:Init(NamePlatesCompleteAuraGlowDB)
+    ns:Init(NamePlatesCompleteAuraGlowDB)
 end
 
 local function Layout(category, spells)

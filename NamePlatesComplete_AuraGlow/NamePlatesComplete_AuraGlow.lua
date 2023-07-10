@@ -26,50 +26,25 @@ Buff to Glow lifecycle matches spell details of the buff:
 
 ]]
 
-NamePlatesComplete_AuraGlowDriverMixin = {}
-
-function NamePlatesComplete_AuraGlowDriverMixin:OnLoad()
-    ns.driver = self
-
+function ns:OnLoad(parent)
     self.spellIDs = {}
 
-    self.pool = CreateFramePool("Frame", self, "NamePlatesComplete_AuraGlowTemplate", function(pool, frame)
-        frame:SetParent(self)
+    self.pool = CreateFramePool("Frame", parent, "NamePlatesComplete_AuraGlowTemplate", function(pool, frame)
+        frame:SetParent(parent)
         frame:Hide()
         frame:ClearAllPoints()
         frame:Reset()
     end)
-
-    self:RegisterEvent("NAME_PLATE_UNIT_ADDED")
-    self:RegisterEvent("NAME_PLATE_UNIT_REMOVED")
-    self:RegisterEvent("UNIT_AURA")
 end
 
-function NamePlatesComplete_AuraGlowDriverMixin:Init(options)
+function ns:Init(options)
     table.wipe(self.spellIDs)
     for _, spellID in ipairs(options.glowSpellIDs) do
         self.spellIDs[spellID] = true
     end
 end
 
-function NamePlatesComplete_AuraGlowDriverMixin:OnEvent(event, ...)
-    local unit = ...
-    local namePlate = C_NamePlate.GetNamePlateForUnit(unit)
-    if not namePlate then
-        return
-    end
-
-    if event == "NAME_PLATE_UNIT_ADDED" then
-        self:ResetGlows(namePlate)
-        self:UpdateGlows(namePlate)
-    elseif event == "NAME_PLATE_UNIT_REMOVED" then
-        self:ResetGlows(namePlate)
-    elseif event == "UNIT_AURA" then
-        self:UpdateGlows(namePlate)
-    end
-end
-
-function NamePlatesComplete_AuraGlowDriverMixin:ResetGlows(namePlate, glows)
+function ns:ResetGlows(namePlate, glows)
     for _, glow in pairs(namePlate.glows or {}) do
         self.pool:Release(glow)
     end
@@ -77,7 +52,7 @@ function NamePlatesComplete_AuraGlowDriverMixin:ResetGlows(namePlate, glows)
     namePlate.glows = glows or {}
 end
 
-function NamePlatesComplete_AuraGlowDriverMixin:UpdateGlows(namePlate)
+function ns:UpdateGlows(namePlate)
     local buffs = { namePlate.UnitFrame.BuffFrame:GetChildren() }
     local currGlows = namePlate.glows
     local nextGlows = {}
@@ -102,10 +77,37 @@ function NamePlatesComplete_AuraGlowDriverMixin:UpdateGlows(namePlate)
     self:ResetGlows(namePlate, nextGlows)
 end
 
-function NamePlatesComplete_AuraGlowDriverMixin:ShouldGlow(buff)
+function ns:ShouldGlow(buff)
     return buff.auraInstanceID and
         buff.spellID and
         self.spellIDs[buff.spellID]
+end
+
+NamePlatesComplete_AuraGlowDriverMixin = {}
+
+function NamePlatesComplete_AuraGlowDriverMixin:OnLoad()
+    ns:OnLoad(self)
+
+    self:RegisterEvent("NAME_PLATE_UNIT_ADDED")
+    self:RegisterEvent("NAME_PLATE_UNIT_REMOVED")
+    self:RegisterEvent("UNIT_AURA")
+end
+
+function NamePlatesComplete_AuraGlowDriverMixin:OnEvent(event, ...)
+    local unit = ...
+    local namePlate = C_NamePlate.GetNamePlateForUnit(unit)
+    if not namePlate then
+        return
+    end
+
+    if event == "NAME_PLATE_UNIT_ADDED" then
+        ns:ResetGlows(namePlate)
+        ns:UpdateGlows(namePlate)
+    elseif event == "NAME_PLATE_UNIT_REMOVED" then
+        ns:ResetGlows(namePlate)
+    elseif event == "UNIT_AURA" then
+        ns:UpdateGlows(namePlate)
+    end
 end
 
 local function toAuraTimes(start_ms, duration_ms)
