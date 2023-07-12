@@ -3,7 +3,7 @@ local _, ns = ...
 
 --[[
 
-NamePlatesComplete_AuraGlow
+NameplateUp_AuraGlow
 
 BlizzardNameplates_NamePlates manages the lifecycle of nameplates and handles
 updates for auras (UNIT_AURA). It cannot be easily modified to add behavior
@@ -15,7 +15,7 @@ calculation, the child frames in the Buff's layout are recreated from a frame
 pool. After this, the child frames need to be reassigned to the new layout's
 frames.
 
-NamePlatesComplete_AuraGlow lifecycle needs to match the buff lifecycle, not the
+NameplateUp_AuraGlow lifecycle needs to match the buff lifecycle, not the
 frame lifecycle. It also needs a delay to begin the glow animations at the right
 time.
 
@@ -30,7 +30,7 @@ Buff to Glow lifecycle matches spell details of the buff:
 function ns:OnLoad(parent)
     self.spellIDs = {}
 
-    self.pool = CreateFramePool("Frame", parent, "NamePlatesComplete_AuraGlowTemplate", function(pool, frame)
+    self.pool = CreateFramePool("Frame", parent, "NameplateUp_AuraGlowTemplate", function(pool, frame)
         frame:SetParent(parent)
         frame:Hide()
         frame:ClearAllPoints()
@@ -84,9 +84,9 @@ function ns:ShouldGlow(buff)
         self.spellIDs[buff.spellID]
 end
 
-NamePlatesComplete_AuraGlowDriverMixin = {}
+NameplateUp_AuraGlowDriverMixin = {}
 
-function NamePlatesComplete_AuraGlowDriverMixin:OnLoad()
+function NameplateUp_AuraGlowDriverMixin:OnLoad()
     ns:OnLoad(self)
 
     self:RegisterEvent("NAME_PLATE_UNIT_ADDED")
@@ -94,7 +94,7 @@ function NamePlatesComplete_AuraGlowDriverMixin:OnLoad()
     self:RegisterEvent("UNIT_AURA")
 end
 
-function NamePlatesComplete_AuraGlowDriverMixin:OnEvent(event, ...)
+function NameplateUp_AuraGlowDriverMixin:OnEvent(event, ...)
     local unit = ...
     local namePlate = C_NamePlate.GetNamePlateForUnit(unit)
     if not namePlate then
@@ -140,14 +140,14 @@ function Aura:PandemicTime()
     return self.expirationTime - (self.duration * 0.30)
 end
 
--- NamePlatesComplete_AuraGlowMixin is the UI for the glow
-NamePlatesComplete_AuraGlowMixin = {}
+-- NameplateUp_AuraGlowMixin is the UI for the glow
+NameplateUp_AuraGlowMixin = {}
 
-function NamePlatesComplete_AuraGlowMixin:Match(buff)
+function NameplateUp_AuraGlowMixin:Match(buff)
     return self.state:Equals(Aura:Create(buff))
 end
 
-function NamePlatesComplete_AuraGlowMixin:Reset()
+function NameplateUp_AuraGlowMixin:Reset()
     self.state = nil
 
     if self.timer then
@@ -167,7 +167,7 @@ function NamePlatesComplete_AuraGlowMixin:Reset()
     self.ProcLoopFlipBook:SetAlpha(0)
 end
 
-function NamePlatesComplete_AuraGlowMixin:Attach(buff)
+function NameplateUp_AuraGlowMixin:Attach(buff)
     self.state = Aura:Create(buff)
 
     self:SetParent(buff)
@@ -177,7 +177,7 @@ function NamePlatesComplete_AuraGlowMixin:Attach(buff)
     self:Show()
 end
 
-function NamePlatesComplete_AuraGlowMixin:Init()
+function NameplateUp_AuraGlowMixin:Init()
     local pandemicDelay = self.state:PandemicTime() - GetTime()
 
     if pandemicDelay < 0 then
@@ -194,7 +194,7 @@ function NamePlatesComplete_AuraGlowMixin:Init()
     end
 end
 
-function NamePlatesComplete_AuraGlowMixin:OnShow()
+function NameplateUp_AuraGlowMixin:OnShow()
     local w, h = self:GetSize()
     self.ProcLoopFlipBook:SetSize(w * 1.4, h * 1.4)
     self.ProcFlashFlipBook:SetSize(w * 4, h * 4)

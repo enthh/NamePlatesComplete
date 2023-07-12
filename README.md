@@ -1,4 +1,4 @@
-# NamePlatesComplete
+# NameplateUp
 
 Completes Blizzard Nameplates with extra features
 

@@ -1,16 +1,16 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Meorawr/wow-ui-schema/main/UI.xsd">
-	<Script file="NamePlatesComplete.lua" />
+	<Script file="NameplateUp.lua" />
 	<Script file="Settings.lua" />
 
-	<Frame name="NamePlatesCompleteDriverFrame" toplevel="true" mixin="NamePlatesCompleteDriverMixin">
+	<Frame name="NameplateUpDriverFrame" toplevel="true" mixin="NameplateUpDriverMixin">
 		<Scripts>
 			<OnLoad method="OnLoad" />
 			<OnEvent method="OnEvent" />
 		</Scripts>
 	</Frame>
 
-	<Frame name="NamePlatesCompleteOptionsFrame" toplevel="true">
+	<Frame name="NameplateUpOptionsFrame" toplevel="true">
 		<KeyValues>
 			<KeyValue key="name" value="NamePlates Complete" />
 		</KeyValues>
@@ -19,7 +19,7 @@
 		</Scripts>
 	</Frame>
 
-	<Frame name="NamePlatesCompleteListElementTemplate" mixin="SettingsListElementMixin" virtual="true">
+	<Frame name="NameplateUpListElementTemplate" mixin="SettingsListElementMixin" virtual="true">
 		<Layers>
 			<Layer level="OVERLAY">
 				<FontString parentKey="Text" inherits="GameFontNormal" justifyH="LEFT" wordwrap="false" />
@@ -49,12 +49,12 @@
 		</Frames>
 	</Frame>
 
-	<Frame name="NamePlatesCompleteAuraElementTemplate" inherits="SettingsDropDownControlTemplate" mixin="NamePlatesCompleteAuraSelectorMixin" virtual="true">
+	<Frame name="NameplateUpAuraElementTemplate" inherits="SettingsDropDownControlTemplate" mixin="NameplateUpAuraSelectorMixin" virtual="true">
 		<Size x="280" y="26" />
 		<Layers>
 			<Layer level="OVERLAY">
 				<Texture parentKey="Icon"
-					file="Interface\AddOns\NamePlatesComplete_AuraGlow\flash1024.PNG">
+					file="Interface\AddOns\NameplateUp_AuraGlow\flash1024.PNG">
 					<Size x="24" y="24" />
 					<Anchors>
 						<Anchor point="LEFT" relativePoint="CENTER" x="-80" y="0" />
@@ -97,13 +97,13 @@
 		</Scripts>
 	</Frame>
 
-	<Frame name="NamePlatesCompleteSpellListElementTemplate" inherits="SettingsListElementTemplate" mixin="NamePlatesCompleteSpellListElementTemplate" virtual="true">
+	<Frame name="NameplateUpSpellListElementTemplate" inherits="SettingsListElementTemplate" mixin="NameplateUpSpellListElementTemplate" virtual="true">
 		<Size x="160" y="26" />
 		<Layers>
 			<Layer level="OVERLAY">
 				<FontString parentKey="Text" inherits="GameFontNormal" justifyH="LEFT" wordwrap="false" />
 				<Texture parentKey="Icon"
-					file="Interface\AddOns\NamePlatesComplete_AuraGlow\flash1024.PNG" hidden="false">
+					file="Interface\AddOns\NameplateUp_AuraGlow\flash1024.PNG" hidden="false">
 					<Size x="24" y="24" />
 					<Anchors>
 						<Anchor point="LEFT" relativePoint="CENTER" x="-80" y="0" />
@@ -133,7 +133,7 @@
 		</Scripts>
 	</Frame>
 
-	<Frame name="NamePlatesCompleteSpellSelectorTemplate" inherits="SettingsListSectionHeaderTemplate" mixin="NamePlatesCompleteSpellSelectorMixin" virtual="true">
+	<Frame name="NameplateUpSpellSelectorTemplate" inherits="SettingsListSectionHeaderTemplate" mixin="NameplateUpSpellSelectorMixin" virtual="true">
 		<Layers>
 			<Layer level="ARTWORK">
 				<Texture parentKey="Icon" hidden="false">
@@ -171,7 +171,7 @@
 		</Scripts>
 	</Frame>
 
-	<Frame name="NamePlatesCompleteSpellTemplate" inherits="SettingsListElementTemplate" mixin="NamePlatesCompleteSpellMixin" virtual="true">
+	<Frame name="NameplateUpSpellTemplate" inherits="SettingsListElementTemplate" mixin="NameplateUpSpellMixin" virtual="true">
 		<Size x="280" y="26" />
 		<Layers>
 			<Layer level="BACKGROUND">
@@ -196,7 +196,7 @@
 		</Scripts>
 	</Frame>
 
-	<Frame name="NamePlatesCompleteOptions" mixin="NamePlatesCompleteOptionsMixin" virtual="true">
+	<Frame name="NameplateUpOptions" mixin="NameplateUpOptionsMixin" virtual="true">
 		<Frames>
 			<Frame parentKey="SettingsList" inherits="SettingsListTemplate" setAllPoints="true" />
 		</Frames>

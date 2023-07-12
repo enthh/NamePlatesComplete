@@ -18,27 +18,27 @@ local defaultAuraSort = {
 }
 
 local function MigrateDB()
-    if NamePlatesCompleteAuraSortDB == nil then
-        NamePlatesCompleteAuraSortDB = { version = 1 }
+    if NameplateUpAuraSortDB == nil then
+        NameplateUpAuraSortDB = { version = 1 }
     end
 end
 
 local function Reload()
-    ns:Init(NamePlatesCompleteAuraSortDB)
+    ns:Init(NameplateUpAuraSortDB)
 end
 
 local function Layout(category, spells)
-    NamePlatesComplete.CreateSpellList(category, spells, "Aura Sort Order")
+    NameplateUp.CreateSpellList(category, spells, "Aura Sort Order")
 end
 
 local function Register()
     MigrateDB()
 
-    local category = Settings.RegisterVerticalLayoutSubcategory(NamePlatesComplete.SettingsCategory, "Aura Sorting")
-    local spells = NamePlatesComplete.RegisterSavedSetting(category, NamePlatesCompleteAuraSortDB, "Sorted spells",
+    local category = Settings.RegisterVerticalLayoutSubcategory(NameplateUp.SettingsCategory, "Aura Sorting")
+    local spells = NameplateUp.RegisterSavedSetting(category, NameplateUpAuraSortDB, "Sorted spells",
         "sortedSpellIDs", defaultAuraSort[UnitClassBase("player")])
 
-    NamePlatesComplete.LayoutSettings(category, Layout, spells)
+    NameplateUp.LayoutSettings(category, Layout, spells)
     Settings.RegisterAddOnCategory(category)
 
     Settings.SetOnValueChangedCallback(spells:GetVariable(), Reload)

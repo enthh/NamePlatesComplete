@@ -89,9 +89,9 @@ function ns:HookNameplateDriverFrame_SetupClassNameplateBars()
     end
 end
 
-local NamePlatesComplete_CastExtraDriverMixin = {}
+local NameplateUp_CastExtraDriverMixin = {}
 
-function NamePlatesComplete_CastExtraDriverMixin:OnLoad()
+function NameplateUp_CastExtraDriverMixin:OnLoad()
     self:RegisterEvent("NAME_PLATE_UNIT_ADDED")
     self:RegisterEvent("NAME_PLATE_UNIT_REMOVED")
     self:RegisterEvent("PLAYER_ENTERING_WORLD")
@@ -100,7 +100,7 @@ function NamePlatesComplete_CastExtraDriverMixin:OnLoad()
     hooksecurefunc(NamePlateDriverFrame, "SetupClassNameplateBars", ns.HookNameplateDriverFrame_SetupClassNameplateBars)
 end
 
-function NamePlatesComplete_CastExtraDriverMixin:OnEvent(event, ...)
+function NameplateUp_CastExtraDriverMixin:OnEvent(event, ...)
     if event == "NAME_PLATE_UNIT_ADDED" then
         self:OnNamePlateUnitAdded(select(1, ...))
     elseif event == "NAME_PLATE_UNIT_REMOVED" then
@@ -109,21 +109,21 @@ function NamePlatesComplete_CastExtraDriverMixin:OnEvent(event, ...)
     end
 end
 
-function NamePlatesComplete_CastExtraDriverMixin:OnNamePlateUnitAdded(unit)
+function NameplateUp_CastExtraDriverMixin:OnNamePlateUnitAdded(unit)
     local namePlate = C_NamePlate.GetNamePlateForUnit(unit)
     if not namePlate or not namePlate.namePlateUnitToken then
         return
     end
 
     if not namePlate.castExtra then
-        namePlate.castExtra = CreateFrame("Frame", nil, namePlate, "NamePlatesComplete_CastExtraTemplate")
+        namePlate.castExtra = CreateFrame("Frame", nil, namePlate, "NameplateUp_CastExtraTemplate")
     end
 
     namePlate.castExtra:Reset()
     namePlate.castExtra:Init(namePlate.namePlateUnitToken, namePlate)
 end
 
-function NamePlatesComplete_CastExtraDriverMixin:OnNamePlateUnitRemoved(unit)
+function NameplateUp_CastExtraDriverMixin:OnNamePlateUnitRemoved(unit)
     local namePlate = C_NamePlate.GetNamePlateForUnit(unit)
     if not namePlate then
         return
@@ -235,9 +235,9 @@ local function CastState(unit)
     return state
 end
 
-local NamePlatesComplete_CastExtraMixin = {}
+local NameplateUp_CastExtraMixin = {}
 
-function NamePlatesComplete_CastExtraMixin:OnLoad()
+function NameplateUp_CastExtraMixin:OnLoad()
     self.interruptIDs = {}
     for _, spellID in ipairs(allInterruptSpellIDs) do
         if IsSpellKnownOrOverridesKnown(spellID) then
@@ -246,7 +246,7 @@ function NamePlatesComplete_CastExtraMixin:OnLoad()
     end
 end
 
-function NamePlatesComplete_CastExtraMixin:Init(unit, namePlate)
+function NameplateUp_CastExtraMixin:Init(unit, namePlate)
     assert(self.unit == nil, "CastExtra Init without Reset - dirty reuse")
 
     self.namePlate = namePlate
@@ -272,7 +272,7 @@ function NamePlatesComplete_CastExtraMixin:Init(unit, namePlate)
     self:OnLoad()
 end
 
-function NamePlatesComplete_CastExtraMixin:Reset()
+function NameplateUp_CastExtraMixin:Reset()
     for _, timer in pairs(self.timers or {}) do
         timer:Cancel()
     end
@@ -301,7 +301,7 @@ function NamePlatesComplete_CastExtraMixin:Reset()
     self:UnregisterEvent("PLAYER_TALENT_UPDATE")
 end
 
-function NamePlatesComplete_CastExtraMixin:OnEvent(event, ...)
+function NameplateUp_CastExtraMixin:OnEvent(event, ...)
     if event == "COMBAT_LOG_EVENT_UNFILTERED" then
         self:OnCombatLog(CombatLogGetCurrentEventInfo())
     elseif event == "UNIT_SPELLCAST_START"
@@ -324,7 +324,7 @@ function NamePlatesComplete_CastExtraMixin:OnEvent(event, ...)
     end
 end
 
-function NamePlatesComplete_CastExtraMixin:OnCombatLog(timestamp, subevent, hideCaster,
+function NameplateUp_CastExtraMixin:OnCombatLog(timestamp, subevent, hideCaster,
                                                        sourceGUID, sourceName, sourceFlags, sourceRaidFlags,
                                                        destGUID, destName, destFlags, destRaidFlags, ...)
     if subevent == "SPELL_INTERRUPT" then
@@ -342,17 +342,17 @@ function NamePlatesComplete_CastExtraMixin:OnCombatLog(timestamp, subevent, hide
     end
 end
 
-function NamePlatesComplete_CastExtraMixin:OnSpellCastInterruptible(canInterrupt)
+function NameplateUp_CastExtraMixin:OnSpellCastInterruptible(canInterrupt)
     self.state.interruptible = canInterrupt
     self:OnUpdate()
 end
 
-function NamePlatesComplete_CastExtraMixin:OnSpellUpdate()
+function NameplateUp_CastExtraMixin:OnSpellUpdate()
     Mixin(self.state, CastState(self.unit))
     self:OnUpdate()
 end
 
-function NamePlatesComplete_CastExtraMixin:OnStart()
+function NameplateUp_CastExtraMixin:OnStart()
     self.state = CastState(self.unit)
 
     self:ReplaceTimer("COMBAT_LOG_EVENT_UNFILTERED")
@@ -364,7 +364,7 @@ function NamePlatesComplete_CastExtraMixin:OnStart()
     self:OnUpdate()
 end
 
-function NamePlatesComplete_CastExtraMixin:ReplaceTimer(name, timer)
+function NameplateUp_CastExtraMixin:ReplaceTimer(name, timer)
     local old = self.timers[name]
     if old then
         old:Cancel()
@@ -373,7 +373,7 @@ function NamePlatesComplete_CastExtraMixin:ReplaceTimer(name, timer)
     self.timers[name] = timer
 end
 
-function NamePlatesComplete_CastExtraMixin:OnStop()
+function NameplateUp_CastExtraMixin:OnStop()
     self.state.casting = false
     self.state.channeling = false
     self.state.interruptible = false
@@ -387,7 +387,7 @@ function NamePlatesComplete_CastExtraMixin:OnStop()
     self:OnUpdate()
 end
 
-function NamePlatesComplete_CastExtraMixin:OnUpdate()
+function NameplateUp_CastExtraMixin:OnUpdate()
     if not self.state.name or self.state.isTradeSkill then
         return
     end
@@ -398,7 +398,7 @@ function NamePlatesComplete_CastExtraMixin:OnUpdate()
     self.view:Update(self.namePlate, self, self.state)
 end
 
-function NamePlatesComplete_CastExtraMixin:UpdateInterruptible()
+function NameplateUp_CastExtraMixin:UpdateInterruptible()
     if self.state.interruptible and #self.interruptIDs > 0 then
         local earliest = self.state.endTime
         for _, interruptID in ipairs(self.interruptIDs) do
@@ -412,12 +412,12 @@ function NamePlatesComplete_CastExtraMixin:UpdateInterruptible()
     end
 end
 
-function NamePlatesComplete_CastExtraMixin:UpdateTarget()
+function NameplateUp_CastExtraMixin:UpdateTarget()
     self.state.targetName = UnitName(self.state.targetUnit)
     self.state.targetClass = UnitClassBase(self.state.targetUnit)
     self.state.targetRole = UnitGroupRolesAssigned(self.state.targetUnit)
 end
 
 -- Exports
-_G["NamePlatesComplete_CastExtraDriverMixin"] = NamePlatesComplete_CastExtraDriverMixin
-_G["NamePlatesComplete_CastExtraMixin"] = NamePlatesComplete_CastExtraMixin
+_G["NameplateUp_CastExtraDriverMixin"] = NameplateUp_CastExtraDriverMixin
+_G["NameplateUp_CastExtraMixin"] = NameplateUp_CastExtraMixin

@@ -1,11 +1,11 @@
-local NamePlatesComplete_AuraTooltipDriverMixin = {}
+local NameplateUp_AuraTooltipDriverMixin = {}
 
-function NamePlatesComplete_AuraTooltipDriverMixin:OnLoad()
+function NameplateUp_AuraTooltipDriverMixin:OnLoad()
     self:RegisterEvent("NAME_PLATE_UNIT_ADDED")
     self:RegisterEvent("UNIT_AURA")
 end
 
-function NamePlatesComplete_AuraTooltipDriverMixin:OnEvent(event, ...)
+function NameplateUp_AuraTooltipDriverMixin:OnEvent(event, ...)
     if event == "NAME_PLATE_UNIT_ADDED" then
         self:OnNamePlateUnitAdded(...)
     elseif event == "UNIT_AURA" then
@@ -13,18 +13,18 @@ function NamePlatesComplete_AuraTooltipDriverMixin:OnEvent(event, ...)
     end
 end
 
-function NamePlatesComplete_AuraTooltipDriverMixin:OnNamePlateUnitAdded(unit)
+function NameplateUp_AuraTooltipDriverMixin:OnNamePlateUnitAdded(unit)
     self:OnUnitAura(unit, { isFullUpdate = true })
 end
 
-function NamePlatesComplete_AuraTooltipDriverMixin:OnUnitAura(unit, unitAuraInfo)
+function NameplateUp_AuraTooltipDriverMixin:OnUnitAura(unit, unitAuraInfo)
     local namePlate = C_NamePlate.GetNamePlateForUnit(unit)
     if namePlate then
         self:UpdateBuffs(namePlate.UnitFrame.BuffFrame, namePlate.namePlateUnitToken, unitAuraInfo)
     end
 end
 
-function NamePlatesComplete_AuraTooltipDriverMixin:UpdateBuffs(buffFrame, unit, unitAuraUpdateInfo)
+function NameplateUp_AuraTooltipDriverMixin:UpdateBuffs(buffFrame, unit, unitAuraUpdateInfo)
     for _, buff in ipairs({ buffFrame:GetChildren() }) do
         if buff:IsMouseEnabled() or not buff:IsMouseMotionEnabled() then
             buff:EnableMouse(false)
@@ -33,4 +33,4 @@ function NamePlatesComplete_AuraTooltipDriverMixin:UpdateBuffs(buffFrame, unit, 
     end
 end
 
-_G["NamePlatesComplete_AuraTooltipDriverMixin"] = NamePlatesComplete_AuraTooltipDriverMixin
+_G["NameplateUp_AuraTooltipDriverMixin"] = NameplateUp_AuraTooltipDriverMixin

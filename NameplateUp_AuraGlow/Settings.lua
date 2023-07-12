@@ -33,27 +33,27 @@ local defaultGlowSpellIDs = {
 
 
 local function MigrateDB()
-    if NamePlatesCompleteAuraGlowDB == nil then
-        NamePlatesCompleteAuraGlowDB = { version = 1 }
+    if NameplateUpAuraGlowDB == nil then
+        NameplateUpAuraGlowDB = { version = 1 }
     end
 end
 
 local function Reload()
-    ns:Init(NamePlatesCompleteAuraGlowDB)
+    ns:Init(NameplateUpAuraGlowDB)
 end
 
 local function Layout(category, spells)
-    NamePlatesComplete.CreateSpellList(category, spells, "Add glow")
+    NameplateUp.CreateSpellList(category, spells, "Add glow")
 end
 
 local function Register()
     MigrateDB()
 
-    local category = Settings.RegisterVerticalLayoutSubcategory(NamePlatesComplete.SettingsCategory, "Aura Glows")
-    local spells = NamePlatesComplete.RegisterSavedSetting(category, NamePlatesCompleteAuraGlowDB, "Glow Spells",
+    local category = Settings.RegisterVerticalLayoutSubcategory(NameplateUp.SettingsCategory, "Aura Glows")
+    local spells = NameplateUp.RegisterSavedSetting(category, NameplateUpAuraGlowDB, "Glow Spells",
         "glowSpellIDs", defaultGlowSpellIDs[UnitClassBase("player")])
 
-    NamePlatesComplete.LayoutSettings(category, Layout, spells)
+    NameplateUp.LayoutSettings(category, Layout, spells)
     Settings.RegisterAddOnCategory(category)
 
     Settings.SetOnValueChangedCallback(spells:GetVariable(), Reload)

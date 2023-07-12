@@ -1,13 +1,13 @@
 local _, priv = ...
 
-function NamePlatesComplete.CreateSettingsSpellSearchInitializer(name, searchText, onSpellAdded, tooltip)
+function NameplateUp.CreateSettingsSpellSearchInitializer(name, searchText, onSpellAdded, tooltip)
     local data = { name = name, searchText = searchText, onSpellAdded = onSpellAdded, tooltip = tooltip }
-    local initializer = Settings.CreateElementInitializer("NamePlatesCompleteSpellSelectorTemplate", data)
+    local initializer = Settings.CreateElementInitializer("NameplateUpSpellSelectorTemplate", data)
     initializer:AddSearchTags(name)
     return initializer
 end
 
-function NamePlatesComplete.CreateSettingsSpellInitializerData(spellID, onSpellRemoved)
+function NameplateUp.CreateSettingsSpellInitializerData(spellID, onSpellRemoved)
     local name, _, icon, _, _, _, spellID, _ = GetSpellInfo(spellID)
     local tooltip = GetSpellDescription(spellID)
     if name then
@@ -15,13 +15,13 @@ function NamePlatesComplete.CreateSettingsSpellInitializerData(spellID, onSpellR
     end
 end
 
-function NamePlatesComplete.CreateSettingsSpellInitializer(data)
-    local initializer = Settings.CreateElementInitializer("NamePlatesCompleteSpellTemplate", data)
+function NameplateUp.CreateSettingsSpellInitializer(data)
+    local initializer = Settings.CreateElementInitializer("NameplateUpSpellTemplate", data)
     initializer:AddSearchTags(data.name)
     return initializer
 end
 
-function NamePlatesComplete.CreateSpellList(category, setting, heading)
+function NameplateUp.CreateSpellList(category, setting, heading)
     local layout = SettingsPanel:GetLayout(category)
 
     local function remove(spellID)
@@ -44,23 +44,23 @@ function NamePlatesComplete.CreateSpellList(category, setting, heading)
     do
         local search = "Search Spell ID or Name. Press enter to add."
         local tooltip = "Enter a spell name or spell ID until the icon appears. Press enter to add."
-        local initializer = NamePlatesComplete.CreateSettingsSpellSearchInitializer(
+        local initializer = NameplateUp.CreateSettingsSpellSearchInitializer(
             heading, search, add, tooltip)
         layout:AddInitializer(initializer)
     end
 
     do
         for _, spellID in ipairs(setting:GetValue()) do
-            local data = NamePlatesComplete.CreateSettingsSpellInitializerData(spellID, remove)
+            local data = NameplateUp.CreateSettingsSpellInitializerData(spellID, remove)
             if data then
-                local initializer = NamePlatesComplete.CreateSettingsSpellInitializer(data)
+                local initializer = NameplateUp.CreateSettingsSpellInitializer(data)
                 layout:AddInitializer(initializer)
             end
         end
     end
 end
 
-function NamePlatesComplete.RegisterSavedSetting(category, saved, name, variable, default)
+function NameplateUp.RegisterSavedSetting(category, saved, name, variable, default)
     local setting = Settings.RegisterAddOnSetting(category, name, variable, type(default), default)
 
     setting:SetValue(saved[variable])
@@ -75,7 +75,7 @@ function NamePlatesComplete.RegisterSavedSetting(category, saved, name, variable
     return setting
 end
 
-function NamePlatesComplete.LayoutSettings(category, layoutFunc, ...)
+function NameplateUp.LayoutSettings(category, layoutFunc, ...)
     local initialize = GenerateClosure(layoutFunc, category, ...)
 
     local function reset(initializers)
@@ -103,25 +103,25 @@ local function RegisterSettings()
     Settings.RegisterAddOnCategory(category)
     -- Settings.OpenToCategory(category.ID)
 
-    NamePlatesComplete.SettingsCategory = category
+    NameplateUp.SettingsCategory = category
 end
 
 SettingsRegistrar:AddRegistrant(RegisterSettings)
 
-NamePlatesCompleteSpellSelectorMixin = CreateFromMixins(SettingsListSectionHeaderMixin)
+NameplateUpSpellSelectorMixin = CreateFromMixins(SettingsListSectionHeaderMixin)
 
-function NamePlatesCompleteSpellSelectorMixin:OnLoad()
+function NameplateUpSpellSelectorMixin:OnLoad()
     self.SearchBox:HookScript("OnTextChanged", GenerateClosure(self.OnSearchTextChanged, self))
     self.SearchBox:HookScript("OnEnterPressed", GenerateClosure(self.OnSearchEnterPressed, self))
 end
 
-function NamePlatesCompleteSpellSelectorMixin:Init(initializer)
+function NameplateUpSpellSelectorMixin:Init(initializer)
     SettingsListSectionHeaderMixin.Init(self, initializer)
 
     self.Tooltip:SetCustomTooltipAnchoring(self.SearchBox, "ANCHOR_LEFT", 0, 0)
 end
 
-function NamePlatesCompleteSpellSelectorMixin:OnSearchTextChanged()
+function NameplateUpSpellSelectorMixin:OnSearchTextChanged()
     local text = self.SearchBox:GetText()
     local name, _, icon, _, _, _, spellID, _ = GetSpellInfo(text)
 
@@ -138,7 +138,7 @@ function NamePlatesCompleteSpellSelectorMixin:OnSearchTextChanged()
     end
 end
 
-function NamePlatesCompleteSpellSelectorMixin:OnSearchEnterPressed()
+function NameplateUpSpellSelectorMixin:OnSearchEnterPressed()
     local text = self.SearchBox:GetText()
     local name, _, icon, _, _, _, spellID, _ = GetSpellInfo(text)
     if name then
@@ -149,20 +149,20 @@ function NamePlatesCompleteSpellSelectorMixin:OnSearchEnterPressed()
     end
 end
 
-NamePlatesCompleteSpellMixin = CreateFromMixins(SettingsListElementMixin)
+NameplateUpSpellMixin = CreateFromMixins(SettingsListElementMixin)
 
-function NamePlatesCompleteSpellMixin:OnLoad()
+function NameplateUpSpellMixin:OnLoad()
     SettingsListElementMixin.OnLoad(self)
     self.CloseButton:HookScript("OnClick", GenerateClosure(self.OnCloseButtonClicked, self))
 end
 
-function NamePlatesCompleteSpellMixin:OnCloseButtonClicked()
+function NameplateUpSpellMixin:OnCloseButtonClicked()
     local initializer = self:GetElementData()
     local data = initializer:GetData()
     data.onSpellRemoved(data.spellID)
 end
 
-function NamePlatesCompleteSpellMixin:Init(initializer)
+function NameplateUpSpellMixin:Init(initializer)
     SettingsListElementMixin.Init(self, initializer)
 
     local data = initializer:GetData()

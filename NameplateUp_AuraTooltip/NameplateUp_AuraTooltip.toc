@@ -4,6 +4,6 @@
 ## Author: Enth-Emerald Dream
 ## Version: @project-version@
 ## X-Website: https://www.curseforge.com/wow/addons/nameplates_complete
-## Dependencies: NamePlatesComplete
+## Dependencies: NameplateUp
 
-NamePlatesComplete_AuraTooltip.xml
+NameplateUp_AuraTooltip.xml

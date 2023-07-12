@@ -1,10 +1,10 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Meorawr/wow-ui-schema/main/UI.xsd">
-	<Script file="NamePlatesComplete_AuraGlow.lua" />
+	<Script file="NameplateUp_AuraGlow.lua" />
 	<Script file="Settings.lua" />
 
-	<Frame name="NamePlatesComplete_AuraGlowDriverFrame" toplevel="true"
-		mixin="NamePlatesComplete_AuraGlowDriverMixin">
+	<Frame name="NameplateUp_AuraGlowDriverFrame" toplevel="true"
+		mixin="NameplateUp_AuraGlowDriverMixin">
 		<Scripts>
 			<OnLoad method="OnLoad" />
 			<OnEvent method="OnEvent" />
@@ -12,8 +12,8 @@
 	</Frame>
 
 
-	<Frame name="NamePlatesComplete_AuraGlowTemplate" virtual="true"
-		mixin="NamePlatesComplete_AuraGlowMixin">
+	<Frame name="NameplateUp_AuraGlowTemplate" virtual="true"
+		mixin="NameplateUp_AuraGlowMixin">
 		<Animations>
 			<AnimationGroup parentKey="Flash" setToFinalAlpha="true">
 				<Alpha parentKey="Delay" childKey="ProcFlashFlipBook" duration="0.002" order="0"
@@ -49,7 +49,7 @@
 		<Layers>
 			<Layer level="ARTWORK">
 				<Texture parentKey="ProcFlashFlipBook"
-					file="Interface\AddOns\NamePlatesComplete_AuraGlow\flash1024.PNG"
+					file="Interface\AddOns\NameplateUp_AuraGlow\flash1024.PNG"
 					alpha="0"
 					setAllPoints="true">
 					<Anchors>
@@ -59,7 +59,7 @@
 			</Layer>
 			<Layer level="OVERLAY">
 				<Texture parentKey="ProcLoopFlipBook"
-					file="Interface\AddOns\NamePlatesComplete_AuraGlow\glow512.PNG"
+					file="Interface\AddOns\NameplateUp_AuraGlow\glow512.PNG"
 					alpha="0"
 					alphaMode="ADD"
 					setAllPoints="true">

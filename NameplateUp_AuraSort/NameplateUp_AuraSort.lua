@@ -30,26 +30,26 @@ function ns:HookAuras(frame)
     end
 end
 
-NamePlatesComplete_AuraSortDriverMixin = {}
+NameplateUp_AuraSortDriverMixin = {}
 
-function NamePlatesComplete_AuraSortDriverMixin:OnLoad()
+function NameplateUp_AuraSortDriverMixin:OnLoad()
     self:RegisterEvent("NAME_PLATE_UNIT_ADDED")
 end
 
-function NamePlatesComplete_AuraSortDriverMixin:OnEvent(event, ...)
+function NameplateUp_AuraSortDriverMixin:OnEvent(event, ...)
     if event == "NAME_PLATE_UNIT_ADDED" then
         self:OnNamePlateUnitAdded(...)
     end
 end
 
-function NamePlatesComplete_AuraSortDriverMixin:OnNamePlateUnitAdded(unit)
+function NameplateUp_AuraSortDriverMixin:OnNamePlateUnitAdded(unit)
     local namePlate = C_NamePlate.GetNamePlateForUnit(unit)
     if namePlate then
         self:SetupHook(namePlate)
     end
 end
 
-function NamePlatesComplete_AuraSortDriverMixin:SetupHook(namePlate)
+function NameplateUp_AuraSortDriverMixin:SetupHook(namePlate)
     local buffFrame = namePlate.UnitFrame.BuffFrame
     if not buffFrame then
         return

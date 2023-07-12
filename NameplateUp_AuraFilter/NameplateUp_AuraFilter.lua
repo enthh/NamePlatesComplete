@@ -37,27 +37,27 @@ end
 function ns:MatchHideBuff(aura, forceAll)
 end
 
-NamePlatesComplete_AuraFilterDriverMixin = {}
+NameplateUp_AuraFilterDriverMixin = {}
 
-function NamePlatesComplete_AuraFilterDriverMixin:OnLoad()
+function NameplateUp_AuraFilterDriverMixin:OnLoad()
     self.hooks = {}
     self:RegisterEvent("NAME_PLATE_UNIT_ADDED")
 end
 
-function NamePlatesComplete_AuraFilterDriverMixin:OnEvent(event, ...)
+function NameplateUp_AuraFilterDriverMixin:OnEvent(event, ...)
     if event == "NAME_PLATE_UNIT_ADDED" then
         self:OnNamePlateUnitAdded(...)
     end
 end
 
-function NamePlatesComplete_AuraFilterDriverMixin:OnNamePlateUnitAdded(unit)
+function NameplateUp_AuraFilterDriverMixin:OnNamePlateUnitAdded(unit)
     local namePlate = C_NamePlate.GetNamePlateForUnit(unit)
     if namePlate then
         self:SetupHook(namePlate)
     end
 end
 
-function NamePlatesComplete_AuraFilterDriverMixin:SetupHook(namePlate)
+function NameplateUp_AuraFilterDriverMixin:SetupHook(namePlate)
     local buffFrame = namePlate.UnitFrame.BuffFrame
     if not buffFrame then
         return

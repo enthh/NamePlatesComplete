@@ -4,7 +4,7 @@
 ## Author: Enth-Emerald Dream
 ## Version: @project-version@
 ## X-Website: https://www.curseforge.com/wow/addons/nameplates_complete
-## Dependencies: NamePlatesComplete
-## SavedVariablesPerCharacter: NamePlatesCompleteAuraSortDB
+## Dependencies: NameplateUp
+## SavedVariablesPerCharacter: NameplateUpAuraSortDB
 
-NamePlatesComplete_AuraSort.xml
+NameplateUp_AuraSort.xml

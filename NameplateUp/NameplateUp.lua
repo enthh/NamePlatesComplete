@@ -1,14 +1,14 @@
 local addOnName, priv = ...
 
-local NamePlatesComplete = {}
+local NameplateUp = {}
 
-local NamePlatesCompleteDriverMixin = {}
+local NameplateUpDriverMixin = {}
 
-function NamePlatesCompleteDriverMixin:OnLoad()
+function NameplateUpDriverMixin:OnLoad()
 end
 
-function NamePlatesCompleteDriverMixin:OnEvent(event, ...)
+function NameplateUpDriverMixin:OnEvent(event, ...)
 end
 
-_G["NamePlatesComplete"] = NamePlatesComplete
-_G["NamePlatesCompleteDriverMixin"] = NamePlatesCompleteDriverMixin
+_G["NameplateUp"] = NameplateUp
+_G["NameplateUpDriverMixin"] = NameplateUpDriverMixin

@@ -1,9 +1,9 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.blizzard.com/wow/ui/ https://raw.githubusercontent.com/Meorawr/wow-ui-schema/main/UI.xsd">
-	<Script file="NamePlatesComplete_AuraFilter.lua" />
+	<Script file="NameplateUp_AuraFilter.lua" />
 
-	<Frame name="NamePlatesComplete_AuraFilterDriverFrame" toplevel="true"
-		mixin="NamePlatesComplete_AuraFilterDriverMixin">
+	<Frame name="NameplateUp_AuraFilterDriverFrame" toplevel="true"
+		mixin="NameplateUp_AuraFilterDriverMixin">
 		<Scripts>
 			<OnLoad method="OnLoad" />
 			<OnEvent method="OnEvent" />
