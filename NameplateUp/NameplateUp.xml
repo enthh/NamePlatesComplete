@@ -12,7 +12,7 @@
 
 	<Frame name="NameplateUpOptionsFrame" toplevel="true">
 		<KeyValues>
-			<KeyValue key="name" value="NamePlates Complete" />
+			<KeyValue key="name" value="Nameplate Up" />
 		</KeyValues>
 
 		<Scripts>

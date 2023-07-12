@@ -1,9 +1,9 @@
 ## Interface: 100100
-## Title: NamePlates - Aura Filter
+## Nameplate Up - Aura Filter
 ## Notes: Blizzard nameplate aura show/hide filters
 ## Author: Enth-Emerald Dream
 ## Version: @project-version@
-## X-Website: https://www.curseforge.com/wow/addons/nameplates_complete
+## X-Website: https://www.curseforge.com/wow/addons/nameplate_up
 ## Dependencies: NameplateUp
 
 NameplateUp_AuraFilter.xml

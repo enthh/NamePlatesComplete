@@ -99,7 +99,7 @@ function NameplateUp.LayoutSettings(category, layoutFunc, ...)
 end
 
 local function RegisterSettings()
-    local category = Settings.RegisterVerticalLayoutCategory("Nameplates Complete")
+    local category = Settings.RegisterVerticalLayoutCategory("Nameplate Up")
     Settings.RegisterAddOnCategory(category)
     -- Settings.OpenToCategory(category.ID)
 

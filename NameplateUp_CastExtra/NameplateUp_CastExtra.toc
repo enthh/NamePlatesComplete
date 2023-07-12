@@ -1,9 +1,9 @@
 ## Interface: 100100
-## Title: NamePlates - Cast Target
+## Nameplate Up - Cast Target
 ## Notes: Blizzard nameplate cast target name
 ## Author: Enth-Emerald Dream
 ## Version: @project-version@
-## X-Website: https://www.curseforge.com/wow/addons/nameplates_complete
+## X-Website: https://www.curseforge.com/wow/addons/nameplate_up
 ## Dependencies: NameplateUp
 
 NameplateUp_CastExtra.xml
