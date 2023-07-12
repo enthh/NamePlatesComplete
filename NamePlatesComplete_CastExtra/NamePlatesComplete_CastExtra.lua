@@ -1,3 +1,5 @@
+local _, ns = ...
+
 -- Imports
 local CreateFrame = _G["CreateFrame"]
 local GetTime = _G["GetTime"]
@@ -57,12 +59,45 @@ local roleMarkup = {
     NONE = "",
 }
 
+function ns.HookDefaultCompactNamePlateFrameAnchors(frame)
+    if frame:IsForbidden() then
+        return
+    end
+
+    -- BOTTOM is still achored to health top, so offset second anchor by the amount it scales the height
+    PixelUtil.SetPoint(frame.name, "TOP", frame.castBar, "BOTTOM", 0, -frame.healthBar:GetHeight() - frame.castBar:GetHeight())
+
+    frame.BuffFrame:ClearAllPoints()
+    PixelUtil.SetPoint(frame.BuffFrame, "BOTTOMLEFT", frame.healthBar, "TOPLEFT", 0, 3)
+end
+
+function ns:HookNameplateDriverFrame_SetupClassNameplateBars()
+    local classBar = self:GetClassNameplateBar()
+    if classBar == nil or classBar:IsForbidden() then
+        return
+    end
+
+    local targetNameplate = C_NamePlate.GetNamePlateForUnit("target")
+    if targetNameplate == nil or targetNameplate:IsForbidden() then
+        return
+    end
+
+    local castBar = targetNameplate.UnitFrame.castBar
+    if classBar:IsShown() and classBar:GetParent() == targetNameplate then
+        classBar:ClearAllPoints()
+        PixelUtil.SetPoint(classBar, "TOP", castBar, "BOTTOM", 0, -3)
+    end
+end
+
 local NamePlatesComplete_CastExtraDriverMixin = {}
 
 function NamePlatesComplete_CastExtraDriverMixin:OnLoad()
     self:RegisterEvent("NAME_PLATE_UNIT_ADDED")
     self:RegisterEvent("NAME_PLATE_UNIT_REMOVED")
     self:RegisterEvent("PLAYER_ENTERING_WORLD")
+
+    hooksecurefunc("DefaultCompactNamePlateFrameAnchors", ns.HookDefaultCompactNamePlateFrameAnchors)
+    hooksecurefunc(NamePlateDriverFrame, "SetupClassNameplateBars", ns.HookNameplateDriverFrame_SetupClassNameplateBars)
 end
 
 function NamePlatesComplete_CastExtraDriverMixin:OnEvent(event, ...)
@@ -118,6 +153,8 @@ function NamePlateUI.Blizzard:Init(namePlate, extra)
     extra:SetPoint("TOPLEFT", castBar, "BOTTOMLEFT", 0, 0)
     extra:SetPoint("BOTTOMRIGHT", castBar, "BOTTOMRIGHT", 0, 0)
     extra:SetFrameLevel(castBar:GetFrameLevel())
+
+    extra.Text:SetFont(castBar.Text:GetFont())
 end
 
 function NamePlateUI.Blizzard:Update(namePlate, extra, state)
@@ -135,6 +172,7 @@ function NamePlateUI.Blizzard:Update(namePlate, extra, state)
         if state.interruptible and state.canInterruptTime > castTime then
             if state.canInterruptTime >= state.endTime then
                 castBar:SetStatusBarTexture(castBar:GetTypeInfo("uninterruptable").filling)
+                castBar:SetHeight(20)
             else
                 castBar:SetStatusBarTexture(castBar:GetTypeInfo("applyingcrafting")
                     .filling)
@@ -147,6 +185,7 @@ function NamePlateUI.Blizzard:Update(namePlate, extra, state)
                 extra.InterruptSpark:Show()
             end
         else
+            castBar:SetHeight(10)
             castBar:SetStatusBarTexture(castBar:GetTypeInfo(castBar.barType).filling)
             extra.InterruptSpark:Hide()
         end

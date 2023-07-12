@@ -8,9 +8,9 @@
 		<Layers>
 			<Layer level="ARTWORK">
 				<FontString parentKey="Text" inherits="SystemFont_NamePlateCastBar">
-					<Size x="0" y="0" />
+					<Size x="0" y="14" />
 					<Anchors>
-						<Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" x="0" y="-2" />
+						<Anchor point="TOPRIGHT" relativePoint="BOTTOMRIGHT" x="0" y="0" />
 					</Anchors>
 				</FontString>
 
