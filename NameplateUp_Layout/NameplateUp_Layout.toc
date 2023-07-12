@@ -1,0 +1,9 @@
+## Interface: 100100
+## Title: Namelpate Up - Layout
+## Notes: Blizzard nameplate layout changes
+## Author: Enth-Emerald Dream
+## Version: @project-version@
+## X-Website: https://www.curseforge.com/wow/addons/nameplate_up
+## Dependencies: NameplateUp
+
+NameplateUp_Layout.xml

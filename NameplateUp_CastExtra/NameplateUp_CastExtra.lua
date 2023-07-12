@@ -59,45 +59,12 @@ local roleMarkup = {
     NONE = "",
 }
 
-function ns.HookDefaultCompactNamePlateFrameAnchors(frame)
-    if frame:IsForbidden() then
-        return
-    end
-
-    -- BOTTOM is still achored to health top, so offset second anchor by the amount it scales the height
-    PixelUtil.SetPoint(frame.name, "TOP", frame.castBar, "BOTTOM", 0, -frame.healthBar:GetHeight() - frame.castBar:GetHeight())
-
-    frame.BuffFrame:ClearAllPoints()
-    PixelUtil.SetPoint(frame.BuffFrame, "BOTTOMLEFT", frame.healthBar, "TOPLEFT", 0, 3)
-end
-
-function ns:HookNameplateDriverFrame_SetupClassNameplateBars()
-    local classBar = self:GetClassNameplateBar()
-    if classBar == nil or classBar:IsForbidden() then
-        return
-    end
-
-    local targetNameplate = C_NamePlate.GetNamePlateForUnit("target")
-    if targetNameplate == nil or targetNameplate:IsForbidden() then
-        return
-    end
-
-    local castBar = targetNameplate.UnitFrame.castBar
-    if classBar:IsShown() and classBar:GetParent() == targetNameplate then
-        classBar:ClearAllPoints()
-        PixelUtil.SetPoint(classBar, "TOP", castBar, "BOTTOM", 0, -3)
-    end
-end
-
 local NameplateUp_CastExtraDriverMixin = {}
 
 function NameplateUp_CastExtraDriverMixin:OnLoad()
     self:RegisterEvent("NAME_PLATE_UNIT_ADDED")
     self:RegisterEvent("NAME_PLATE_UNIT_REMOVED")
     self:RegisterEvent("PLAYER_ENTERING_WORLD")
-
-    hooksecurefunc("DefaultCompactNamePlateFrameAnchors", ns.HookDefaultCompactNamePlateFrameAnchors)
-    hooksecurefunc(NamePlateDriverFrame, "SetupClassNameplateBars", ns.HookNameplateDriverFrame_SetupClassNameplateBars)
 end
 
 function NameplateUp_CastExtraDriverMixin:OnEvent(event, ...)
