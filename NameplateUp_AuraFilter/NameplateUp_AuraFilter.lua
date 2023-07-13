@@ -31,10 +31,14 @@ function ns.ShouldShowBuff(buffFrame, aura, forceAll)
 end
 
 function ns:MatchShowBuff(aura, forceAll)
-    return aura.spellId == 5217
+    return (aura.isStealable and aura.duration < 120)
+        or (ns.CC[aura.spellId])
+        or (ns.CD[aura.spellId])
+        or (ns.Tank[aura.spellId])
 end
 
 function ns:MatchHideBuff(aura, forceAll)
+    return false
 end
 
 NameplateUp_AuraFilterDriverMixin = {}
