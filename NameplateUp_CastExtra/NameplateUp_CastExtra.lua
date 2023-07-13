@@ -83,10 +83,13 @@ function NameplateUp_CastExtraDriverMixin:OnNamePlateUnitAdded(unit)
     end
 
     if not namePlate.castExtra then
-        namePlate.castExtra = CreateFrame("Frame", nil, namePlate, "NameplateUp_CastExtraTemplate")
+        namePlate.castExtra = CreateFrame("Frame", namePlate:GetName().."CastExtra", namePlate, "NameplateUp_CastExtraTemplate")
     end
 
+    ---@diagnostic disable-next-line: undefined-field
     namePlate.castExtra:Reset()
+
+    ---@diagnostic disable-next-line: undefined-field
     namePlate.castExtra:Init(namePlate.namePlateUnitToken, namePlate)
 end
 
@@ -102,9 +105,7 @@ function NameplateUp_CastExtraDriverMixin:OnNamePlateUnitRemoved(unit)
     end
 end
 
-local NamePlateUI = {
-    Blizzard = {},
-}
+local Blizzard = {}
 
 local function UnitText(name, class, role)
     local text = role and roleMarkup[role] or ""
@@ -112,7 +113,7 @@ local function UnitText(name, class, role)
     return text .. color:WrapTextInColorCode(name)
 end
 
-function NamePlateUI.Blizzard:Init(namePlate, extra)
+function Blizzard:Init(namePlate, extra)
     local castBar = namePlate.UnitFrame.castBar
     extra:SetParent(castBar)
     extra:ClearAllPoints()
@@ -124,7 +125,7 @@ function NamePlateUI.Blizzard:Init(namePlate, extra)
     extra.Text:SetFont(castBar.Text:GetFont())
 end
 
-function NamePlateUI.Blizzard:Update(namePlate, extra, state)
+function Blizzard:Update(namePlate, extra, state)
     if not namePlate.UnitFrame then
         return
     end
@@ -138,11 +139,9 @@ function NamePlateUI.Blizzard:Update(namePlate, extra, state)
         local castTime = state.startTime + castBar:GetValue()
         if state.interruptible and state.canInterruptTime > castTime then
             if state.canInterruptTime >= state.endTime then
-                castBar:SetStatusBarTexture(castBar:GetTypeInfo("uninterruptable").filling)
-                castBar:SetHeight(20)
+                castBar:SetStatusBarDesaturation(0.8)
             else
-                castBar:SetStatusBarTexture(castBar:GetTypeInfo("applyingcrafting")
-                    .filling)
+                castBar:SetStatusBarDesaturation(0.2)
 
                 local scale = ClampedPercentageBetween(state.canInterruptTime, state.startTime, state.endTime)
                 local cx = castBar:GetWidth() * scale
@@ -152,8 +151,7 @@ function NamePlateUI.Blizzard:Update(namePlate, extra, state)
                 extra.InterruptSpark:Show()
             end
         else
-            castBar:SetHeight(10)
-            castBar:SetStatusBarTexture(castBar:GetTypeInfo(castBar.barType).filling)
+            castBar:SetStatusBarDesaturation(0)
             extra.InterruptSpark:Hide()
         end
 
@@ -164,12 +162,6 @@ function NamePlateUI.Blizzard:Update(namePlate, extra, state)
     elseif state.interruptSourceName then
         extra.Text:SetText(string.format("[%s]", UnitText(state.interruptSourceName, state.interruptSourceClass)))
         extra.Text:Show()
-    end
-end
-
-local function CreateAdapter(namePlate, extra)
-    if namePlate.UnitFrame ~= nil then
-        return CreateAndInitFromMixin(NamePlateUI.Blizzard, namePlate, extra)
     end
 end
 
@@ -217,7 +209,7 @@ function NameplateUp_CastExtraMixin:Init(unit, namePlate)
     assert(self.unit == nil, "CastExtra Init without Reset - dirty reuse")
 
     self.namePlate = namePlate
-    self.view = CreateAdapter(namePlate, self)
+    self.view = CreateAndInitFromMixin(Blizzard, namePlate, self)
 
     self.unit = unit
     self.unitGUID = UnitGUID(unit)
@@ -292,8 +284,8 @@ function NameplateUp_CastExtraMixin:OnEvent(event, ...)
 end
 
 function NameplateUp_CastExtraMixin:OnCombatLog(timestamp, subevent, hideCaster,
-                                                       sourceGUID, sourceName, sourceFlags, sourceRaidFlags,
-                                                       destGUID, destName, destFlags, destRaidFlags, ...)
+                                                sourceGUID, sourceName, sourceFlags, sourceRaidFlags,
+                                                destGUID, destName, destFlags, destRaidFlags, ...)
     if subevent == "SPELL_INTERRUPT" then
         local sourceUnit = UnitTokenFromGUID(sourceGUID)
         if sourceUnit == nil then
