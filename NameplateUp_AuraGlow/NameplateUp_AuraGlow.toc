@@ -1,9 +1,10 @@
 ## Interface: 100105
-## Nameplate Up - Aura Glow
-## Notes: Blizzard Nameplate aura glow effect on Pandemic or other conditions
+## Title: Nameplate Up - Aura Glow
+## Notes: Blizzard nameplate aura glow effect on pandemic or other conditions
 ## Author: Enth-Emerald Dream
 ## Version: @project-version@
-## X-Website: https://www.curseforge.com/wow/addons/nameplate_up
+## X-Website: https://www.curseforge.com/wow/addons/nameplateup
+## IconTexture: Interface\TARGETINGFRAME\UI-TargetingFrame-BarFill
 ## Dependencies: NameplateUp
 ## SavedVariablesPerCharacter: NameplateUpAuraGlowDB
 

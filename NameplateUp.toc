@@ -1,3 +1,4 @@
+# For .pkgmeta release.sh
 ## Interface: 100105
 ## Title: Nameplate Up
 ## Notes: Blizzard Nameplate customization options and common functions
@@ -5,7 +6,5 @@
 ## Version: @project-version@
 ## IconTexture: Interface\TARGETINGFRAME\UI-TargetingFrame-BarFill
 ## X-Website: https://www.curseforge.com/wow/addons/nameplateup
+## X-Curse-Project-ID: 888672
 ## Dependencies: Blizzard_NamePlates
-## 888672
-
-NameplateUp.xml

@@ -1,0 +1,18 @@
+package-as: NameplateUp
+
+ignore:
+  - .luacheckrc
+  - .github
+  - README.md
+  - examples/*
+  - *.xcf
+
+move-folders:
+  NameplateUp/NameplateUp: NameplateUp
+  NameplateUp/NameplateUp_AuraFilter: NameplateUp_AuraFilter
+  NameplateUp/NameplateUp_AuraGlow: NameplateUp_AuraGlow
+  NameplateUp/NameplateUp_AuraSort: NameplateUp_AuraSort
+  NameplateUp/NameplateUp_AuraTooltip: NameplateUp_AuraTooltip
+  NameplateUp/NameplateUp_CastExtra: NameplateUp_CastExtra
+  NameplateUp/NameplateUp_Classify: NameplateUp_Classify
+  NameplateUp/NameplateUp_Layout: NameplateUp_Layout

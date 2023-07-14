@@ -1,9 +1,10 @@
 ## Interface: 100105
-## Nameplate Up - Cast Target
-## Notes: Blizzard nameplate cast target name
+## Title: Nameplate Up - Cast Extras
+## Notes: Blizzard nameplate cast target and interrupt name
 ## Author: Enth-Emerald Dream
 ## Version: @project-version@
-## X-Website: https://www.curseforge.com/wow/addons/nameplate_up
+## X-Website: https://www.curseforge.com/wow/addons/nameplateup
+## IconTexture: Interface\TARGETINGFRAME\UI-TargetingFrame-BarFill
 ## Dependencies: NameplateUp
 
 NameplateUp_CastExtra.xml
