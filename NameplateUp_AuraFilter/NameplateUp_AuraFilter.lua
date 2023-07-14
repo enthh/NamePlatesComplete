@@ -35,6 +35,7 @@ function ns:MatchShowBuff(aura, forceAll)
         or (ns.CC[aura.spellId])
         or (ns.CD[aura.spellId])
         or (ns.Tank[aura.spellId])
+        or (ns.DPS[aura.spellId])
 end
 
 function ns:MatchHideBuff(aura, forceAll)

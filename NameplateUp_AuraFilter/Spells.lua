@@ -345,6 +345,13 @@ ns.CD = {
     [199754] = ns.Class.ROGUE,       -- Riposte
     [343142] = ns.Class.ROGUE,       -- Dreadblades
     [121471] = ns.Class.ROGUE,       -- Shadow Blades
+
+    [360827] = ns.Class.EVOKER,      -- Blistering Scales
+    [395152] = ns.Class.EVOKER,      -- Ebon Might
+}
+
+ns.DPS = {
+    [391889] = ns.Class.DRUID -- Adaptive Swarm
 }
 
 ns.Tank = {
