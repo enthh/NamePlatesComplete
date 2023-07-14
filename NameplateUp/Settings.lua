@@ -69,14 +69,15 @@ end
 function NameplateUp.RegisterSavedSetting(category, saved, name, variable, default)
     local setting = Settings.RegisterAddOnSetting(category, name, variable, type(default), default)
 
+    if not saved[variable] then
+        saved[variable] = default
+    end
+
     setting:SetValue(saved[variable])
+
     Settings.SetOnValueChangedCallback(variable, function(_, modifiedSetting, value)
         saved[modifiedSetting:GetVariable()] = value
     end)
-
-    if setting:GetValue() == nil then
-        setting:SetValueToDefault()
-    end
 
     return setting
 end
