@@ -36,8 +36,8 @@ globals = {
 	"NameplateUp",
 	"NameplateUpDriverMixin",
 	"NameplateUp_ClassifyDB",
-	"NameplateUpAuraSortDB",
-	"NameplateUpAuraGlowDB",
+	"NameplateUp_AuraSortDB",
+	"NameplateUp_AuraGlowDB",
 
 	"NameplateUpSpellSelectorMixin",
 

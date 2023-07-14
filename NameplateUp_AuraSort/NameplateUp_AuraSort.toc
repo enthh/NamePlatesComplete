@@ -6,6 +6,6 @@
 ## X-Website: https://www.curseforge.com/wow/addons/nameplateup
 ## IconTexture: Interface\TARGETINGFRAME\UI-TargetingFrame-BarFill
 ## Dependencies: NameplateUp
-## SavedVariablesPerCharacter: NameplateUpAuraSortDB
+## SavedVariablesPerCharacter: NameplateUp_AuraSortDB
 
 NameplateUp_AuraSort.xml
