@@ -370,5 +370,3 @@ ns.Tank = {
     [387174] = ns.Class.PALADIN,     -- Eye of Tyr
     [383843] = ns.Class.PALADIN,     -- Crusader's Resolve
 }
-
-S = ns

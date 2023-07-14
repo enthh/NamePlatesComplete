@@ -171,11 +171,11 @@ local function CastState(unit)
         targetUnit = unit .. "target",
     }
 
-    local name, text, texture, startTime, endTime, isTradeSkill, castID, notInterruptible, spellID = UnitCastingInfo(
+    local name, text, _, startTime, endTime, isTradeSkill, castID, notInterruptible, spellID = UnitCastingInfo(
         unit)
 
     if not name then
-        name, text, texture, startTime, endTime, isTradeSkill, notInterruptible, spellID = UnitChannelInfo(unit)
+        name, text, _, startTime, endTime, isTradeSkill, notInterruptible, spellID = UnitChannelInfo(unit)
     end
 
     if name then

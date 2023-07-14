@@ -1,5 +1,11 @@
 local _, priv = ...
 
+local _G = _G
+local Settings = _G.Settings
+local SettingsInbound = _G.SettingsInbound
+local SettingsPanel = _G.SettingsPanel
+local SettingsListElementMixin = _G.SettingsListElementMixin
+
 function NameplateUp.CreateSettingsSpellSearchInitializer(name, searchText, onSpellAdded, tooltip)
     local data = { name = name, searchText = searchText, onSpellAdded = onSpellAdded, tooltip = tooltip }
     local initializer = Settings.CreateElementInitializer("NameplateUpSpellSelectorTemplate", data)
@@ -8,7 +14,7 @@ function NameplateUp.CreateSettingsSpellSearchInitializer(name, searchText, onSp
 end
 
 function NameplateUp.CreateSettingsSpellInitializerData(spellID, onSpellRemoved)
-    local name, _, icon, _, _, _, spellID, _ = GetSpellInfo(spellID)
+    local name, _, icon = GetSpellInfo(spellID)
     local tooltip = GetSpellDescription(spellID)
     if name then
         return { name = name, tooltip = tooltip, icon = icon, spellID = spellID, onSpellRemoved = onSpellRemoved }
@@ -91,7 +97,7 @@ function NameplateUp.LayoutSettings(category, layoutFunc, ...)
         SettingsInbound.RepairDisplay()
     end
 
-    for _, setting in ipairs({...}) do
+    for _, setting in ipairs({ ... }) do
         Settings.SetOnValueChangedCallback(setting:GetVariable(), reload)
     end
 
@@ -108,7 +114,7 @@ end
 
 SettingsRegistrar:AddRegistrant(RegisterSettings)
 
-NameplateUpSpellSelectorMixin = CreateFromMixins(SettingsListSectionHeaderMixin)
+local NameplateUpSpellSelectorMixin = CreateFromMixins(SettingsListSectionHeaderMixin)
 
 function NameplateUpSpellSelectorMixin:OnLoad()
     self.SearchBox:HookScript("OnTextChanged", GenerateClosure(self.OnSearchTextChanged, self))
@@ -149,7 +155,7 @@ function NameplateUpSpellSelectorMixin:OnSearchEnterPressed()
     end
 end
 
-NameplateUpSpellMixin = CreateFromMixins(SettingsListElementMixin)
+local NameplateUpSpellMixin = CreateFromMixins(SettingsListElementMixin)
 
 function NameplateUpSpellMixin:OnLoad()
     SettingsListElementMixin.OnLoad(self)
@@ -169,3 +175,6 @@ function NameplateUpSpellMixin:Init(initializer)
     self.Text:SetText(data.name .. " |cnGRAY_FONT_COLOR:" .. data.spellID .. "|r")
     self.Icon:SetTexture(data.icon)
 end
+
+_G.NameplateUpSpellMixin         = NameplateUpSpellMixin
+_G.NameplateUpSpellSelectorMixin = NameplateUpSpellSelectorMixin

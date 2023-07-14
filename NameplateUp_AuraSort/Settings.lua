@@ -4,7 +4,7 @@ local defaultAuraSort = {
     DRUID = {
         164812, -- Moonfire
         164815, -- Sunfire
-        
+
         202347, -- Stellar flare
 
         155722, -- Rake

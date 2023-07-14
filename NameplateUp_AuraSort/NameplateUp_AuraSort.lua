@@ -1,5 +1,9 @@
 local _, ns = ...
 
+local _G = _G
+local TableUtil = _G.TableUtil
+local AuraUtil = _G.AuraUtil
+
 ns.spellOrder = {}
 ns.hooks = {}
 
@@ -30,7 +34,7 @@ function ns:HookAuras(frame)
     end
 end
 
-NameplateUp_AuraSortDriverMixin = {}
+local NameplateUp_AuraSortDriverMixin = {}
 
 function NameplateUp_AuraSortDriverMixin:OnLoad()
     self:RegisterEvent("NAME_PLATE_UNIT_ADDED")
@@ -59,3 +63,5 @@ function NameplateUp_AuraSortDriverMixin:SetupHook(namePlate)
 
     NamePlateDriverFrame:OnUnitAuraUpdate(namePlate.namePlateUnitToken, { isFullUpdate = true })
 end
+
+_G.NameplateUp_AuraSortDriverMixin = NameplateUp_AuraSortDriverMixin

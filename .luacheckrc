@@ -1,7 +1,8 @@
 std = "lua51"
 max_line_length = false
 exclude_files = {
-	".luacheckrc"
+	".luacheckrc",
+	".release",
 }
 ignore = {
 	"11./SLASH_.*", -- Setting an undefined (Slash handler) global variable
@@ -32,16 +33,27 @@ globals = {
 	"DisplayTableInspectorWindow",
 
 	-- Exported table
-	"FeralSnapshots",
-	"FeralSnapshotsNamePlate",
-	"FeralSnapshotsNamePlateDriverMixin",
-	"FeralSnapshotsAuraMixin",
-	"FeralSnapshotsIndicatorMixin",
+	"NameplateUp",
+	"NameplateUpDriverMixin",
+	"NameplateUp_ClassifyDB",
+	"NameplateUpAuraSortDB",
+	"NameplateUpAuraGlowDB",
+
+	"NameplateUpSpellSelectorMixin",
 
 	-- misc FrameXML
 	"CreateFramePool",
 	"CreateAndInitFromMixin",
 	"CreateColor",
+
+	-- Newer APIs
+	"Settings",
+	"SettingsInbound",
+	"SettingsPanel",
+	"SettingsRegistrar",
+	"SettingsListSectionHeaderMixin",
+	"GenerateClosure",
+	"MergeTable",
 
 	-- misc custom
 	"AceGUIWeakAurasMultiLineEditBoxInsertLink",
@@ -51,33 +63,8 @@ globals = {
 	"OmniCC",
 	"ElvUI",
 
-	-- WeakAuras
-	"WeakAuras_DropDownMenu",
-	"WeakAuras_DropIndicator",
-	"WeakAuras",
-	"WeakAurasAceEvents",
-	"WeakAurasCompanion",
-	"WeakAurasFrame",
-	"WeakAurasOptions",
-	"WeakAurasOptionsSaved",
-	"WeakAurasSaved",
-	"WeakAurasTimers",
-	"WeakAurasArchive",
-
-	-- Third Party Addons/Libs
-	"BigWigs",
-	"BigWigsLoader",
-	"CUSTOM_CLASS_COLORS",
-	"DBM",
-	"DBT",
-	"ElvUIPlayerNamePlateAnchor",
-	"GTFO",
-	"IndentationLib",
-	"KuiNameplatesCore",
-	"KuiNameplatesPlayerAnchor",
-	"Plater",
-
 	-- FrameXML misc
+	"ClassNameplateManaBarFrame",
 	"BackdropTemplateMixin",
 	"C_Timer",
 	"ChatFrame_AddMessageEventFilter",

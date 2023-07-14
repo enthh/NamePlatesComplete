@@ -42,7 +42,7 @@ function ns:MatchHideBuff(aura, forceAll)
     return false
 end
 
-NameplateUp_AuraFilterDriverMixin = {}
+local NameplateUp_AuraFilterDriverMixin = {}
 
 function NameplateUp_AuraFilterDriverMixin:OnLoad()
     self.hooks = {}
@@ -70,3 +70,5 @@ function NameplateUp_AuraFilterDriverMixin:SetupHook(namePlate)
 
     ns:HookShouldShowBuff(buffFrame)
 end
+
+_G.NameplateUp_AuraFilterDriverMixin = NameplateUp_AuraFilterDriverMixin

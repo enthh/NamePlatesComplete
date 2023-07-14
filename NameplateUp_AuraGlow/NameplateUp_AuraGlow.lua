@@ -84,7 +84,7 @@ function ns:ShouldGlow(buff)
         self.spellIDs[buff.spellID]
 end
 
-NameplateUp_AuraGlowDriverMixin = {}
+local NameplateUp_AuraGlowDriverMixin = {}
 
 function NameplateUp_AuraGlowDriverMixin:OnLoad()
     ns:OnLoad(self)
@@ -141,7 +141,7 @@ function Aura:PandemicTime()
 end
 
 -- NameplateUp_AuraGlowMixin is the UI for the glow
-NameplateUp_AuraGlowMixin = {}
+local NameplateUp_AuraGlowMixin = {}
 
 function NameplateUp_AuraGlowMixin:Match(buff)
     return self.state:Equals(Aura:Create(buff))
@@ -199,3 +199,6 @@ function NameplateUp_AuraGlowMixin:OnShow()
     self.ProcLoopFlipBook:SetSize(w * 1.4, h * 1.4)
     self.ProcFlashFlipBook:SetSize(w * 4, h * 4)
 end
+
+_G.NameplateUp_AuraGlowDriverMixin = NameplateUp_AuraGlowDriverMixin
+_G.NameplateUp_AuraGlowMixin       = NameplateUp_AuraGlowMixin

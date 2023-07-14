@@ -3,6 +3,7 @@ local _, ns = ...
 -- Imports
 local _G = _G
 local PixelUtil = _G.PixelUtil
+local DefaultCompactNamePlatePlayerFrameSetUpOptions = _G.DefaultCompactNamePlatePlayerFrameSetUpOptions
 
 function ns.HookDefaultCompactNamePlateFrameAnchors(frame)
     if frame:IsForbidden() then
