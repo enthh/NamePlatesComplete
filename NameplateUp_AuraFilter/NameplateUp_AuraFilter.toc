@@ -1,5 +1,5 @@
-## Interface: 100100
-## Nameplate Up - Aura Filter
+## Interface: 100105
+## Title: Nameplate Up - Aura Filter
 ## Notes: Blizzard nameplate aura show/hide filters
 ## Author: Enth-Emerald Dream
 ## Version: @project-version@

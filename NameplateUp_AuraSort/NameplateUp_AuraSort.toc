@@ -1,4 +1,4 @@
-## Interface: 100100
+## Interface: 100105
 ## Nameplate Up - Aura Sort
 ## Notes: Blizzard nameplate aura sorting
 ## Author: Enth-Emerald Dream

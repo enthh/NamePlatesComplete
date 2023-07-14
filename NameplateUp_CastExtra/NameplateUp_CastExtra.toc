@@ -1,4 +1,4 @@
-## Interface: 100100
+## Interface: 100105
 ## Nameplate Up - Cast Target
 ## Notes: Blizzard nameplate cast target name
 ## Author: Enth-Emerald Dream

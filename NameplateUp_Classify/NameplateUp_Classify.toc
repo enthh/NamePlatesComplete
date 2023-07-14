@@ -1,4 +1,4 @@
-## Interface: 100100
+## Interface: 100105
 ## Title: Namelpate Up - Classify
 ## Notes: Classify Blizzard nameplates based on spell types
 ## Author: Enth-Emerald Dream
