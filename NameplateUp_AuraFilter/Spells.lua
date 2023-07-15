@@ -16,6 +16,7 @@ for classID = 1, GetNumClasses() do
 end
 
 ns.CC = {
+    [1160] = ns.Class.WARRIOR,       --  Demoralizing Shout
     [5246] = ns.Class.WARRIOR,       --  Intimidating Shout
     [132168] = ns.Class.WARRIOR,     --  Shockwave
     [6552] = ns.Class.WARRIOR,       --  Pummel
@@ -350,18 +351,15 @@ ns.CD = {
     [395152] = ns.Class.EVOKER,      -- Ebon Might
 }
 
-ns.DPS = {
-    [391889] = ns.Class.DRUID -- Adaptive Swarm
-}
-
-ns.Tank = {
-    [135286] = ns.Class.DRUID,       -- Tooth and Claw
+ns.Player = {
     [80313] = ns.Class.DRUID,        -- Pulverize
+    [135286] = ns.Class.DRUID,       -- Tooth and Claw
     [204069] = ns.Class.DRUID,       -- Lunar Beam
+    [391889] = ns.Class.DRUID,       -- Adaptive Swarm
+    [417713] = ns.Class.DRUID,       -- Dire Fixation
 
     [123725] = ns.Class.MONK,        -- Breath of Fire
 
-    [1160] = ns.Class.WARRIOR,       -- Demoralizing Shout
     [410219] = ns.Class.WARRIOR,     -- Earthen Smash
 
     [392490] = ns.Class.DEAHTKNIGHT, -- Enfeeble
