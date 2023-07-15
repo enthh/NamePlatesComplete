@@ -26,8 +26,11 @@ If applicable, add screenshots to help explain your problem.
 **Game details:**
  - Solo / Party / Raid
  - Zone / Instance / Dungeon / Raid
- - Which Addons enabled
- - Which relevant Options enabled
+ - Which AddOns are enabled
+ - Which relevant Options are enabled
+
+**Error message**
+Install [BugSack](https://www.curseforge.com/wow/addons/bugsack) and [BugGrabber](https://www.curseforge.com/wow/addons/bug-grabber) to get the full error message with filenames and line numbers.
 
 **Additional context**
 Add any other context about the problem here.
