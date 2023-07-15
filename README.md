@@ -2,7 +2,7 @@
 
 *Status: Experimental*
 
-Lightweight addsons that completes Blizzard Nameplates with extra features.
+Lightweight addons that completes Blizzard Nameplates with extra features.
 
 
 ## Modules
